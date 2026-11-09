@@ -1,0 +1,12 @@
+{
+  "name": "students-platform-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "سيرفر حسابات منصة الطلاب",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test.js"
+  },
+  "engines": { "node": ">=22.13" }
+}
