@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="theme-color" content="#0b1220">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>منصة الطلاب</title>
+<style>
+:root{--bg:#0b1220;--card:#17223b;--ink:#e8eefc;color-scheme:dark;--mut:#9fb0d4;--acc:#ffd24a;--ok:#4ade80;--err:#ff8a8a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,"Segoe UI",Tahoma,Arial,sans-serif}
+body{min-height:100vh;min-height:100dvh}
+.w{max-width:560px;margin:0 auto;padding:16px}
+h1{font-size:22px;margin:8px 0 14px;text-align:center}
+h2{font-size:18px;margin:0 0 10px}
+.c{background:var(--card);border-radius:14px;padding:14px;margin-bottom:12px}
+label{display:block;font-size:13px;color:var(--mut);margin:8px 0 4px}
+input,select,button{font:inherit;width:100%;padding:11px;border-radius:10px;border:1px solid #2b3a5e;background:#101a30;color:#e8eefc}
+button{background:var(--acc);color:#2a2100;font-weight:700;cursor:pointer;margin-top:8px;border:0}
+button.s{background:#2b3a5e;color:#fff}
+button.d{background:#c0392b;color:#fff}
+.g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.m{font-size:13px;margin-top:8px;min-height:18px}
+.ok{color:var(--ok)}.er{color:var(--err)}
+.code{font-size:20px;letter-spacing:3px;text-align:center;background:#0d1528;padding:10px;border-radius:10px;direction:ltr;margin-top:8px}
+.menu{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.menu button{padding:22px 8px;font-size:16px;margin:0}
+.top{display:flex;gap:8px;margin-bottom:10px}
+.top button{margin:0}
+.row{display:flex;gap:8px;align-items:center;background:#1c2947;border-radius:10px;padding:8px;margin-top:8px;font-size:14px}
+.row span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row button{width:auto;padding:6px 10px;margin:0;font-size:13px}
+.calc{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;direction:ltr}
+.calc button{margin:0;padding:12px 0;background:#2b3a5e;color:#fff}
+.calc .o{background:#3a4d7a}.calc .e{background:var(--acc);color:#2a2100}
+#disp{direction:ltr;text-align:right;font-size:22px;margin-bottom:6px}
+#res{direction:ltr;text-align:right;font-size:28px;font-weight:700;color:var(--acc);min-height:36px;margin-bottom:8px}
+.hide{display:none}
+.btn{display:block;text-align:center;padding:11px;border-radius:10px;background:var(--acc);color:#2a2100;font-weight:700;margin:8px 0 0;font-size:16px;cursor:pointer}
+.tl{display:flex;flex-wrap:wrap;gap:6px}.tl button{width:auto;padding:8px 10px;margin:0;font-size:13px}.tl button.on{outline:3px solid #fff}
+.sw{width:28px!important;height:28px;padding:0!important;border-radius:50%;border:2px solid #fff}
+#sh{border-collapse:collapse;direction:ltr}#sh th{background:#0d1528;color:#fff;position:sticky;top:0;padding:4px 8px;font-size:12px}
+#sh td input{width:88px;border-radius:0;padding:8px 6px;border:1px solid #3a4d7a}#sh td.r{background:#0d1528;font-size:12px;text-align:center;padding:0 6px}
+.tb{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px}.tb>*{width:auto;flex:none;padding:8px 10px;margin:0;font-size:14px}.tb input[type=color]{width:42px;height:38px;padding:2px}
+#ed{min-height:58vh;background:#fff;color:#111;border-radius:8px;padding:14px;font-size:18px;line-height:1.8;outline:none;overflow-wrap:anywhere}
+#ed table{border-collapse:collapse}#ed td{border:1px solid #888;padding:6px;min-width:44px}
+small{color:var(--mut)}
+#spl{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;perspective:700px;transition:opacity .45s,visibility .45s}
+#spl.out{opacity:0;visibility:hidden}
+#spl b{font-size:84px;animation:spin3 1.3s cubic-bezier(.3,.7,.3,1) both;filter:drop-shadow(0 12px 14px #000a)}
+@keyframes spin3{from{transform:rotateY(-200deg) rotateX(30deg) scale(.3);opacity:0}to{transform:none;opacity:1}}
+.hero{perspective:600px;display:flex;justify-content:center;gap:16px;margin:4px 0 10px}
+.hero span{font-size:34px;display:inline-block;animation:fl 3.2s ease-in-out infinite;filter:drop-shadow(0 8px 6px #0008)}
+.hero span:nth-child(2){animation-delay:.5s}.hero span:nth-child(3){animation-delay:1s}.hero span:nth-child(4){animation-delay:1.5s}
+@keyframes fl{0%,100%{transform:translateY(0) rotateY(-20deg) rotateX(8deg)}50%{transform:translateY(-9px) rotateY(20deg) rotateX(-8deg)}}
+#login .c{animation:in3d .7s cubic-bezier(.2,.8,.2,1) both}
+@keyframes in3d{from{opacity:0;transform:perspective(700px) rotateX(32deg) translateY(30px) scale(.94)}to{opacity:1;transform:none}}
+button.busy{position:relative;color:transparent!important;pointer-events:none}
+button.busy::after{content:"";position:absolute;inset:0;margin:auto;width:20px;height:20px;border:3px solid #888;border-top-color:transparent;border-radius:50%;animation:sp .6s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+#mb{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));inset-inline-start:10px;z-index:60;width:44px;height:44px;border-radius:50%;padding:0;margin:0;font-size:22px;box-shadow:0 4px 12px #0007}
+#sb{position:fixed;inset:0;z-index:70}
+#sbo{position:absolute;inset:0;background:#000a}
+#sb nav{position:absolute;top:0;bottom:0;inset-inline-start:0;width:80%;max-width:310px;background:var(--card);padding:calc(18px + env(safe-area-inset-top,0px)) 16px 16px;box-shadow:0 0 30px #000;animation:in3d .35s ease both;overflow:auto}
+#sb .sbi{display:block;width:100%;text-align:start;text-decoration:none;color:var(--ink);background:#1c2947;padding:14px;border-radius:12px;margin:10px 0 0;font-size:16px;font-weight:600}
+#sb .sbh{font-size:18px;font-weight:700;color:var(--acc);margin-bottom:10px}
+.c{box-shadow:0 4px 18px #0005;border:1px solid #22314f}
+button,.btn{transition:transform .12s,filter .15s}
+button:active,.btn:active{transform:scale(.97)}
+button:hover{filter:brightness(1.08)}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.menu button{background:linear-gradient(145deg,#ffd24a,#ffb92e);box-shadow:0 4px 12px #0004}
+h1{color:var(--acc)}
+.row{transition:background .15s;cursor:pointer}.row:hover{background:#243459}
+#sq{margin-top:6px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+.pwr{position:relative}.pwr input{padding-inline-end:44px}.eye{position:absolute;inset-inline-end:12px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:18px;line-height:1;user-select:none}
+.otp{display:flex;gap:8px;justify-content:center;direction:ltr;margin:14px 0 6px}
+.otp input{width:50px;height:60px;padding:0;text-align:center;font-size:26px;font-weight:700;border-radius:12px;border:2px solid #2b3a5e;background:#101a30;transition:.15s}
+.otp input:focus{border-color:var(--acc)}
+.otp.ok input{border-color:#4ade80;background:#0f3d24;color:#4ade80}
+.otp.bad input{border-color:#ff5c5c;background:#3d1414;color:#ff8a8a;animation:shk .4s}
+@keyframes shk{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.ir{display:flex;gap:8px;align-items:center;justify-content:space-between;background:#1c2947;border-radius:10px;padding:10px;margin-top:8px}.ir button{width:auto;margin:0;padding:7px 10px;font-size:13px}
+.red{color:#ff4d4d;font-weight:800;font-size:19px;text-align:center;margin:6px 0 2px}
+.shield{text-align:center;filter:drop-shadow(0 0 14px #ff4d4d99)}
+.g2{display:flex;gap:8px}.g2 #pc{width:46%;flex:none}.g2 #ph{flex:1;min-width:0}
+</style>
+</head>
+<body>
+<button id="mb" class="hide" onclick="side(1)" aria-label="menu">☰</button>
+<div id="sb" class="hide"><div id="sbo" onclick="side(0)"></div><nav>
+ <div class="sbh" id="sbn"></div>
+ <label data-i18n="lang"></label>
+ <select id="lg2" onchange="setLang(this.value)"><option value="ar">العربية</option><option value="en">English</option><option value="fr">Français</option><option value="es">Español</option><option value="tr">Türkçe</option><option value="fa">فارسی</option></select>
+ <button class="sbi" onclick="go('set')">⚙️ الإعدادات</button>
+ <a class="sbi" href="https://wa.me/249997268842" target="_blank" rel="noopener">💬 <span data-i18n="s1"></span></a>
+ <button class="sbi" onclick="go('f1')">✨ <span data-i18n="s2"></span></button>
+ <button class="sbi" onclick="go('about')">ℹ️ <span data-i18n="m_about"></span></button>
+</nav></div>
+<div id="spl"><b>🎓</b></div>
+<div class="w">
+
+<!-- LOGIN -->
+<div id="login">
+ <select id="lg" onchange="setLang(this.value)" style="width:auto;position:fixed;top:calc(10px + env(safe-area-inset-top,0px));inset-inline-end:12px;margin:0;z-index:40;padding:8px"><option value="ar">العربية</option><option value="en">English</option><option value="fr">Français</option><option value="es">Español</option><option value="tr">Türkçe</option><option value="fa">فارسی</option></select>
+ <div class="hero"><span>🎓</span><span>📚</span><span>🧮</span><span>🔒</span></div>
+ <h1 data-i18n="t">🎓 منصة الطلاب</h1>
+ <a href="https://wa.me/249997268842?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D9%84%D8%AF%D9%8A%20%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%A7%D9%84%D9%85%D9%86%D8%B5%D8%A9" target="_blank" rel="noopener" aria-label="WhatsApp" style="position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:50;display:flex;align-items:center;gap:8px;background:#25D366;color:#fff;text-decoration:none;font-weight:700;padding:10px 16px 10px 12px;border-radius:30px;box-shadow:0 4px 14px #0008"><svg viewBox="0 0 24 24" width="30" height="30" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>للاستفسار</a>
+ <div class="c">
+  <div class="g"><button id="tin" onclick="setMode('in')" style="margin-top:0" data-i18n="in">تسجيل الدخول</button><button id="tup" class="s" onclick="setMode('up')" style="margin-top:0" data-i18n="up">إنشاء حساب</button></div>
+  <div id="inw">
+   <label data-i18n="id">رقم الهاتف أو البريد الإلكتروني</label>
+   <input id="id1" dir="ltr" autocomplete="off" maxlength="254" autocapitalize="none" oninput="if(!this.value.includes('@'))fixPhoneInput(this,0)">
+   <label data-i18n="pw">كلمة المرور</label>
+   <input id="pw1" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')run($('lgb'),doLogin)">
+   <button id="lgb" onclick="run(this,doLogin)" data-i18n="go">دخول</button>
+   <button class="s" onclick="setMode('fg')" data-i18n="fg">نسيت كلمة المرور؟</button>
+   <button class="s" onclick="setMode('dl')" data-i18n="dm">تنزيل نسخة بياناتي</button>
+  </div>
+  <div id="upw" class="hide">
+   <label data-i18n="nar"></label><input id="arn" dir="rtl" maxlength="80" autocomplete="off">
+   <label data-i18n="nen"></label><input id="enn" dir="ltr" maxlength="80" autocomplete="off">
+   <label data-i18n="ct"></label>
+   <select id="nc"><option value="SD">السودان / Sudan</option><option value="EG">مصر / Egypt</option><option value="SA">السعودية / Saudi Arabia</option><option value="AE">الإمارات / UAE</option><option value="QA">قطر / Qatar</option><option value="KW">الكويت / Kuwait</option><option value="JO">الأردن / Jordan</option><option value="LY">ليبيا / Libya</option><option value="OT">Other / أخرى</option></select>
+   <label data-i18n="nid"></label><input id="nid" dir="ltr" inputmode="text" maxlength="24" autocomplete="off">
+   <label data-i18n="ph">رقم الهاتف</label>
+   <div class="g2"><select id="pc"></select><input id="ph" type="tel" inputmode="numeric" dir="ltr" maxlength="15" placeholder="912345678" autocomplete="tel-national" oninput="phIn(this)"></div>
+   <small>اختر الدولة ثم اكتب الرقم بدون الصفر الأول ورمز الدولة.</small>
+   <label data-i18n="em"></label>
+   <input id="em" type="email" dir="ltr" maxlength="254" autocomplete="email" autocapitalize="none" spellcheck="false">
+   <label data-i18n="sx"></label><select id="sx"><option value="" data-i18n="sx"></option><option value="M" data-i18n="ml"></option><option value="F" data-i18n="fm"></option></select>
+   <label><span data-i18n="pw"></span> (6+)</label>
+   <input id="pw" type="password" autocomplete="off">
+   <button onclick="run(this,sendCode)" data-i18n="nx">متابعة وطلب رمز التحقق</button>
+   <div id="codebox" class="hide"></div>
+  </div>
+  <div id="fgw" class="hide">
+   <h2 style="margin-top:12px" data-i18n="fgt"></h2>
+   <label>ابحث عن حسابك: اكتب رقم هاتفك أو بريدك الإلكتروني أو رقم هويتك الوطنية</label>
+   <input id="fid" dir="ltr" autocomplete="off" maxlength="254" autocapitalize="none">
+   <button onclick="run(this,checkFg)">بحث عن حسابي</button>
+   <div id="fgn" class="hide"><div id="fgo"></div><div id="fgp" class="hide"><label data-i18n="npw"></label><input id="fpw" type="password" autocomplete="new-password"><button onclick="run(this,resetPw)" data-i18n="sp"></button></div></div>
+  </div>
+  <div id="dlw" class="hide"><h2 data-i18n="dm" style="margin-top:12px"></h2><label data-i18n="nid"></label><input id="dn" dir="ltr" autocomplete="off" maxlength="24"><label data-i18n="pw"></label><input id="dp" type="password" autocomplete="off"><label>صيغة الملف</label><select id="df"><option value="zip">ZIP</option><option value="txt">TXT</option></select><button onclick="run(this,dlMine)" data-i18n="dlb"></button></div>
+  <div id="m1" class="m"></div>
+  <small style="cursor:pointer;text-decoration:underline" onclick="ownerPanel()">لوحة المالك</small>
+ </div>
+</div>
+
+<!-- HOME -->
+<div id="home" class="hide">
+ <h1 data-i18n="hm">المنصة</h1>
+ <h2 id="wl" style="text-align:center;font-size:22px;animation:in3d .7s both"></h2>
+ <div class="menu">
+  <button onclick="go('reg')">📝 <span data-i18n="m_reg">تسجيل طلاب</span></button>
+  <button onclick="go('vault')">🔒 <span data-i18n="m_vault">الخزنة</span></button>
+  <button onclick="go('calc')">🧮 <span data-i18n="m_calc">الحاسبة</span></button>
+  <button onclick="go('word')">📝 <span data-i18n="m_word">وورد</span></button>
+  <button onclick="go('draw')">🎨 <span data-i18n="m_draw">الرسم</span></button>
+  <button onclick="go('sheet')">📊 <span data-i18n="m_sheet">إكسل</span></button>
+ </div>
+</div>
+
+<!-- REGISTER -->
+<div id="reg" class="hide">
+ <div class="top"><button class="s" onclick="go('home')">← رجوع</button></div>
+ <div class="c">
+  <h2>تسجيل طالب</h2>
+  <div id="form"></div>
+  <button onclick="saveStu()">حفظ وإرسال</button>
+  <div id="m3" class="m"></div>
+ </div>
+ <div class="c"><h2>الطلاب المسجلون <small id="scnt"></small></h2><input id="sq" placeholder="🔍 بحث بالاسم أو الكلية أو الرقم..." oninput="renderStus()" autocomplete="off"><label>صيغة الملف</label><select id="ef"><option value="zip">ZIP</option><option value="txt">TXT</option></select><button class="s" onclick="expStu()">⬇ تصدير الطلاب</button><div id="stus"></div><div id="sd"></div></div>
+</div>
+
+<div id="set" class="hide">
+ <div class="top"><button class="s" onclick="go('home')">← رجوع</button></div>
+ <div class="c"><h2>⚙️ الإعدادات</h2><small>الاسم والهوية يُعدَّلان برمز تحقق فقط. باقي البيانات يمكن تعديلها مباشرة.</small></div>
+ <div class="c"><h2>👤 معلومات حسابي</h2><div id="sinfo"></div></div>
+ <div class="c"><h2>🔐 الخصوصية والأمان</h2>
+  <div class="ir"><div style="min-width:0"><b>🛡️ حماية واسترجاع الحساب</b><br><small id="sqst"></small></div><button class="s" onclick="sqOpen()">فتح</button></div>
+  <div class="ir"><div style="min-width:0"><b>👥 حفظ جهات اتصالي</b><br><small id="ctst"></small></div><button class="s" onclick="ctOpen()">فتح</button></div>
+ </div>
+ <div class="c"><h2>الحساب</h2>
+  <button class="s" onclick="logout()" data-i18n="lo">تسجيل خروج</button>
+  <button class="d" onclick="$('delbox').classList.toggle('hide')">🗑 حذف الحساب</button>
+  <div id="delbox" class="c hide" style="margin-top:10px"><label>للتأكيد أدخل الرقم الجامعي أو الرقم الوطني لأحد الطلاب المسجلين (أو كلمة مرور الحساب)</label><input id="dk" type="password" autocomplete="off"><button class="d" onclick="delAcc()">حذف الحساب نهائياً</button><div id="m6" class="m"></div></div>
+ </div>
+</div>
+<div id="f1" class="hide"><div class="top"><button class="s" onclick="go('home')">← رجوع</button></div><div class="c"><h2>✨ <span data-i18n="s2"></span></h2><small data-i18n="soon"></small></div></div>
+<!-- VAULT -->
+<div id="vault" class="hide">
+ <div class="top"><button class="s" onclick="go('home')">← رجوع</button></div>
+ <div class="c hide" id="vna"><h2>🔒 الخزنة</h2><p>الخزنة متاحة فقط على هواتف أندرويد. افتح التطبيق من هاتفك.</p></div>
+ <div class="c hide" id="vlock">
+  <h2>🔒 الخزنة</h2>
+  <div id="vset" class="hide"><small>أنشئ كلمة مرور للخزنة (٤ أحرف على الأقل)</small><input id="vp1" type="password" placeholder="كلمة المرور" style="margin-top:8px"><input id="vp2" type="password" placeholder="أعد كتابتها" style="margin-top:8px"><button onclick="vSet()">حفظ وفتح</button></div>
+  <div id="vin" class="hide"><label>كلمة مرور الخزنة</label><input id="vp3" type="password"><button onclick="vUnlock()">فتح</button><button class="s" onclick="vPanel('vfg')">نسيت كلمة المرور؟</button></div>
+  <div id="vfg" class="hide"><label>كلمة مرور الحساب أو الرقم الجامعي أو الرقم الوطني</label><input id="vp4" type="password"><label>كلمة مرور الخزنة الجديدة</label><input id="vp5" type="password"><button onclick="vReset()">تحقق وتعيين</button><button class="s" onclick="vPanel('vin')">رجوع</button></div>
+  <div id="m4" class="m"></div>
+ </div>
+ <div class="c hide" id="vopen">
+  <h2>🔒 الخزنة — ملفاتي الخاصة</h2>
+  <input id="vf" type="file" multiple onchange="addFiles()" style="position:absolute;opacity:0;width:1px;height:1px;pointer-events:none">
+  <label class="btn" for="vf" style="padding:28px 12px;font-size:18px">📁 اضغط هنا لاختيار ملفاتك وصورك وإخفائها</label>
+  <div id="vlist"></div>
+    <div id="m5" class="m"></div>
+ </div>
+</div>
+
+<!-- CALC -->
+<div id="calc" class="hide">
+ <div class="top"><button class="s" onclick="go('home')">← رجوع</button><button class="s" id="degb" onclick="toggleDeg()">DEG</button></div>
+ <div class="c">
+  <input id="disp" placeholder="0" dir="ltr">
+  <div id="res"></div>
+  <div class="calc" id="keys"></div>
+  <div id="hist" style="margin-top:8px;direction:ltr;font-size:13px;color:var(--mut)"></div>
+ </div>
+</div>
+
+<!-- WORD -->
+<div id="word" class="hide">
+ <div class="top"><button class="s" onclick="go('home')">← رجوع</button><button onclick="wExp('docx')">💾 Word</button><button class="s" onclick="wExp('txt')">TXT</button><button class="d" onclick="wNew()">جديد</button></div>
+ <input id="wt" placeholder="عنوان المستند" oninput="wSave()">
+ <div class="tb" id="wtb" style="margin:8px 0">
+  <select onchange="cmd('fontName',this.value)"><option value="Tahoma">الخط</option><option>Tahoma</option><option>Arial</option><option>Times New Roman</option><option>Courier New</option><option>Georgia</option></select>
+  <select onchange="cmd('fontSize',this.value)"><option value="3">الحجم</option><option value="1">صغير جداً</option><option value="2">صغير</option><option value="3">عادي</option><option value="4">متوسط</option><option value="5">كبير</option><option value="6">كبير جداً</option><option value="7">ضخم</option></select>
+  <button onclick="cmd('bold')"><b>B</b></button><button onclick="cmd('italic')"><i>I</i></button><button onclick="cmd('underline')"><u>U</u></button><button onclick="cmd('strikeThrough')"><s>S</s></button>
+  <input type="color" value="#000000" oninput="cmd('foreColor',this.value)"><input type="color" value="#ffff00" oninput="cmd('hiliteColor',this.value)">
+  <button onclick="cmd('justifyRight')">يمين</button><button onclick="cmd('justifyCenter')">وسط</button><button onclick="cmd('justifyLeft')">يسار</button><button onclick="cmd('justifyFull')">ضبط</button>
+  <button onclick="cmd('insertUnorderedList')">• قائمة</button><button onclick="cmd('insertOrderedList')">1. قائمة</button>
+  <button onclick="cmd('formatBlock','<h1>')">عنوان ١</button><button onclick="cmd('formatBlock','<h2>')">عنوان ٢</button><button onclick="cmd('formatBlock','<div>')">نص</button>
+  <button onclick="cmd('indent')">إزاحة +</button><button onclick="cmd('outdent')">إزاحة −</button>
+  <button onclick="wTable()">▦ جدول</button><button onclick="cmd('undo')">↩</button><button onclick="cmd('redo')">↪</button><button onclick="cmd('removeFormat')">مسح التنسيق</button>
+ </div>
+ <div id="ed" contenteditable="true" dir="rtl" oninput="wSave()"></div>
+ <small id="wc"></small>
+</div>
+
+<!-- DRAW -->
+<div id="draw" class="hide">
+ <div class="top"><button class="s" onclick="go('home')">← رجوع</button><button class="s" onclick="dUndo()">↩ تراجع</button><button class="d" onclick="dClear()">مسح</button><button onclick="dSave()">💾 حفظ</button></div>
+ <div class="c" style="padding:8px">
+  <div class="tl" id="tl"></div>
+  <div class="tl" id="pl" style="margin:8px 0"></div>
+  <div class="tl" style="align-items:center;margin-bottom:8px"><span>الحجم</span><input id="sz" type="range" min="1" max="60" value="4" style="width:130px;padding:0"><label style="margin:0;display:flex;gap:4px;align-items:center"><input id="fil" type="checkbox" style="width:auto"> تعبئة</label><input id="cc" type="color" value="#000000" style="width:44px;height:32px;padding:0" oninput="setCol(this.value)"></div>
+  <canvas id="cv" style="width:100%;background:#fff;border-radius:8px;touch-action:none;display:block"></canvas>
+ </div>
+</div>
+
+<!-- SHEET -->
+<div id="sheet" class="hide">
+ <div class="top"><button class="s" onclick="go('home')">← رجوع</button><button onclick="shExp()">تصدير CSV</button><label class="btn" for="shf" style="margin:0;background:#2b3a5e;color:#fff;flex:1">استيراد</label><button class="d" onclick="shClr()">مسح</button></div>
+ <input id="shf" type="file" accept=".csv,.txt" onchange="shImp(this)" style="position:absolute;opacity:0;width:1px;height:1px;pointer-events:none">
+ <div class="c" style="padding:6px"><small>ابدأ المعادلة بـ = مثل: =A1+B1 أو =SUM(A1:A5) ‏(SUM, AVERAGE, MAX, MIN, COUNT)</small>
+  <div style="overflow:auto;max-height:66vh;margin-top:6px"><table id="sh"></table></div></div>
+</div>
+
+<!-- ABOUT -->
+<div id="about" class="hide">
+ <div class="top"><button class="s" onclick="go('home')">← رجوع</button></div>
+ <div class="c" style="text-align:center">
+  <div style="font-size:52px">🎓</div>
+  <h2>عن التطبيق</h2>
+  <p>منصة الطلاب: تسجيل الطلاب، الخزنة الخاصة، الحاسبة العلمية، الوورد، الرسم والإكسل في مكان واحد.</p>
+ </div>
+ <div class="c" style="text-align:center">
+  <h2>عن المصمم</h2>
+  <img src="data:image/jpeg;base64,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" alt="Alamin Osama Babker Alamin" style="width:150px;height:150px;border-radius:50%;object-fit:cover;border:3px solid var(--acc);box-shadow:0 6px 20px #0008">
+  <h2 style="margin-top:12px">الأمين أسامة بابكر الأمين</h2>
+  <p dir="ltr" style="font-weight:700;color:var(--acc);margin:0 0 8px">Alamin Osama Babker Alamin</p>
+  <p>بكالوريوس تقانة المعلومات<br>طالب جامعي<br>العمر: ٢١ سنة<br>السكن: الخرطوم</p>
+  <p>أتمنى لكم كل التوفيق</p>
+ </div>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+const OWNER='+249997268842';
+const $=id=>document.getElementById(id);
+addEventListener('error',e=>{const b=document.createElement('div');b.style.cssText='position:fixed;top:0;left:0;right:0;background:#c0392b;color:#fff;padding:6px;font-size:12px;z-index:999;direction:ltr';b.textContent='Error: '+e.message;document.body.appendChild(b);setTimeout(()=>b.remove(),8000)});
+const norm=p=>String(p||'').replace(/\D/g,'').replace(/^0+/,'');
+const key9=p=>norm(p).slice(-9);
+/* ---------- Official validation ---------- */
+const AR='٠١٢٣٤٥٦٧٨٩';
+function fixPhoneInput(el,strict){let v=el.value.replace(/[٠-٩]/g,d=>AR.indexOf(d));if(strict)v=v.replace(/[^\d+\s\-]/g,'');el.value=v.slice(0,strict?20:254)}
+function phoneNorm(r){let s=String(r||'').trim().replace(/[٠-٩]/g,d=>AR.indexOf(d)).replace(/[\s\-().]/g,'');if(s.startsWith('00'))s='+'+s.slice(2);return /^\+[1-9]\d{7,14}$/.test(s)?s:null}
+function phoneErr(r){let s=String(r||'').trim().replace(/[٠-٩]/g,d=>AR.indexOf(d)).replace(/[\s\-().]/g,'');
+ if(!s)return 'أدخل رقم الهاتف';
+ if(s.startsWith('00'))s='+'+s.slice(2);
+ if(!s.startsWith('+'))return 'اكتب الرقم بالصيغة الدولية مع رمز الدولة، مثال: +249912345678';
+ if(/[^\d]/.test(s.slice(1)))return 'رقم الهاتف يجب أن يحتوي على أرقام فقط بعد علامة +';
+ const d=s.slice(1);
+ if(d.length>15)return 'رقم الهاتف أطول من المسموح (الحد الأقصى ١٥ رقماً مع رمز الدولة)';
+ if(d.length<8)return 'رقم الهاتف قصير، تأكد من كتابته كاملاً مع رمز الدولة';
+ if(d[0]==='0')return 'رمز الدولة غير صحيح';
+ if(/^(\d)\1+$/.test(d))return 'رقم الهاتف غير صحيح';
+ if(d.startsWith('249')){if(d.length!==12)return 'الرقم السوداني يجب أن يكون +249 متبوعاً بـ ٩ أرقام بالضبط';if(d[3]==='0')return 'لا تكتب الصفر بعد +249'}
+ return ''}
+function emailErr(r){const e=String(r||'').trim();
+ if(!e)return 'أدخل البريد الإلكتروني';
+ if(e.length>254)return 'البريد أطول من المسموح (٢٥٤ حرفاً كحد أقصى)';
+ if(/\s/.test(e))return 'البريد الإلكتروني لا يجوز أن يحتوي على مسافات';
+ if(/[^\x00-\x7F]/.test(e))return 'اكتب البريد بالأحرف الإنجليزية فقط';
+ const parts=e.split('@');if(parts.length!==2)return 'البريد الإلكتروني يجب أن يحتوي على علامة @ واحدة';
+ const [l,dm]=parts;
+ if(!l||!dm)return 'البريد الإلكتروني غير مكتمل';
+ if(l.length>64)return 'الجزء الذي قبل @ أطول من المسموح (٦٤ حرفاً)';
+ if(!/^[A-Za-z0-9]([A-Za-z0-9._%+-]*[A-Za-z0-9])?$/.test(l)||l.includes('..'))return 'البريد الإلكتروني يحتوي على رموز أو نقاط غير صحيحة';
+ if(dm.length>253)return 'اسم النطاق أطول من المسموح';
+ const lb=dm.split('.');if(lb.length<2)return 'النطاق غير صحيح، مثال: name@gmail.com';
+ if(!lb.every(x=>/^[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?$/.test(x)))return 'النطاق في البريد الإلكتروني غير صحيح';
+ if(!/^[A-Za-z]{2,24}$/.test(lb[lb.length-1]))return 'امتداد البريد غير صحيح (مثل com أو net)';
+ return ''}
+function idErr(v){const s=String(v||'').trim();if(!s)return 'أدخل رقم الهاتف أو البريد الإلكتروني';
+ if(s.includes('@'))return emailErr(s);
+ if(!/^\+?[\d\s\-().]+$/.test(s))return 'أدخل رقم هاتف أو بريداً إلكترونياً صحيحاً';
+ const n=s.replace(/\D/g,'');if(n.length>15)return 'رقم الهاتف أطول من المسموح (١٥ رقماً كحد أقصى)';
+ if(n.length<7)return 'رقم الهاتف قصير';return ''}
+const ls={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},
+ set(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
+let pend=null,code=null,verified=null,me=null,vkey=null,mode='in',dinit=0,shinit=0,wInit=0;
+function setMode(m){mode=m;code=null;verified=null;$('inw').classList.toggle('hide',m!=='in');$('upw').classList.toggle('hide',m!=='up');$('fgw').classList.toggle('hide',m!=='fg');$('dlw').classList.toggle('hide',m!=='dl');$('tin').className=m==='up'?'s':'';$('tup').className=m==='up'?'':'s';$('codebox').classList.add('hide');$('fgn').classList.add('hide');msg('m1','')}
+
+function go(s){['login','home','reg','vault','calc','about','word','draw','sheet','f1','set'].forEach(x=>$(x).classList.toggle('hide',x!==s));scrollTo(0,0);$('mb').classList.toggle('hide',s==='login');window.side&&side(0)}
+function msg(id,t,ok){const e=$(id);e.textContent=t;e.className='m '+(ok?'ok':'er')}
+
+/* ---------- Accounts ---------- */
+function findAcc(id){const A=ls.get('acc',{});id=(id||'').trim();if(!id)return null;
+ if(id.includes('@')){const l=id.toLowerCase();return Object.values(A).find(a=>a.e&&a.e.toLowerCase()===l)||null}
+ const k=key9(id);return k.length>=7?A[k]||null:null}
+async function newHash(pw){const s=b64(crypto.getRandomValues(new Uint8Array(16)));return{s,h:await hashPw(pw,s)}}
+async function doLogin(){const a=findAcc($('id1').value),pw=$('pw1').value;
+ const ie=idErr($('id1').value);if(ie){msg('m1',ie);return}
+ if(pw.length>128){msg('m1','كلمة المرور أطول من المسموح');return}
+ if(!a){msg('m1','لا يوجد حساب بهذا الرقم أو البريد');return}
+ const L=ls.get('lock',{n:0,t:0});if(Date.now()<L.t){msg('m1','محاولات كثيرة خاطئة، انتظر دقيقة ثم حاول مجدداً');return}
+ if(a.h){if(await hashPw(pw,a.s)!==a.h){L.n=(L.n||0)+1;if(L.n>=5){L.t=Date.now()+60000;L.n=0}ls.set('lock',L);msg('m1','كلمة المرور خاطئة');return}ls.del('lock')}
+ else{if(pw.length<6){msg('m1','حسابك قديم: اكتب كلمة مرور جديدة (٦ أحرف على الأقل) وستُحفظ');return}
+  Object.assign(a,await newHash(pw));const A=ls.get('acc',{});A[key9(a.p)]=a;ls.set('acc',A)}
+ {const sm=stMsg(a);if(sm){msg('m1',sm);return}}start(a)}
+function start(a){ls.set('session',{p:a.p,e:a.e});const k=key9(a.p),u=ls.get('u:'+k,{});u.email=a.e;u.phone=a.p;ls.set('u:'+k,u);enter()}
+async function sendCode(){const pe=phoneErr($('ph').value),ee=emailErr($('em').value);
+ if(pe){msg('m1',pe);return}
+ if(ee){msg('m1',ee);return}
+ if($('pw').value.length>128){msg('m1','كلمة المرور أطول من المسموح (١٢٨ حرفاً)');return}
+ const p=phoneNorm($('ph').value),e=$('em').value.trim().toLowerCase();
+ if(norm(p).length<8){msg('m1','أدخل رقم هاتف صحيح');return}
+ if(!/^\S+@\S+\.\S+$/.test(e)){msg('m1','أدخل بريداً إلكترونياً صحيحاً');return}
+ if($('pw').value.length<6){msg('m1','كلمة المرور قصيرة (٦ أحرف على الأقل)');return}
+ const A=ls.get('acc',{});
+ if(A[key9(p)]){msg('m1','هذا الرقم مسجل بحساب بالفعل، استخدم تسجيل الدخول');return}
+ if(Object.values(A).some(a=>a.e&&a.e.toLowerCase()===e.toLowerCase())){msg('m1','هذا البريد مرتبط بحساب آخر');return}
+ const X=sgnExtra();if(!X)return;pend={p,e,pw:$('pw').value,...X};$('codebox').classList.remove('hide');
+ msg('m1','اطلب رمز التحقق من مالك المنصة ثم أدخله.',1)}
+const OKEY='';
+async function ownerCode(p){const h=await crypto.subtle.digest('SHA-256',te.encode(OKEY+':'+key9(p)));return String(new DataView(h).getUint32(0)%100000).padStart(5,'0')}
+function reqCode(){if(!pend)return;openWa('249997268842','أرغب بإنشاء حساب في منصة الطلاب\nرقمي: '+pend.p+'\nالبريد: '+pend.e+'\nأرجو إرسال رمز التحقق')}
+function ownerPanel(){return dlg('<p style="margin:0 0 8px">لوحة المالك</p><input id="ok" type="password" placeholder="مفتاح المالك"><input id="op" type="tel" dir="ltr" placeholder="رقم هاتف الشخص" style="margin-top:8px"><div id="oc" class="code" style="min-height:30px"></div><button id="y">إظهار رمز التحقق</button><button class="s" id="n">إغلاق</button>',(o,d)=>{
+ o.querySelector('#n').onclick=()=>d(1);
+ o.querySelector('#y').onclick=async()=>{const c=o.querySelector('#oc');if(o.querySelector('#ok').value!==OKEY){c.textContent='المفتاح خاطئ';return}const q=o.querySelector('#op').value;if(key9(q).length<7){c.textContent='أدخل الرقم';return}c.textContent=await ownerCode(q)}})}
+async function verify(){if(!pend)return;
+ if($('cd').value.trim()!==await ownerCode(pend.p)){msg('m1','الرمز غير صحيح');return}
+ const A=ls.get('acc',{}),a={p:pend.p,e:pend.e,ar:pend.ar,en:pend.en,nc:pend.nc,nid:pend.nid,sx:pend.sx,...await newHash(pend.pw)};A[key9(a.p)]=a;ls.set('acc',A);
+ const pw0=pend.pw;code=null;pend=null;['pw','cd','ph','em'].forEach(i=>$(i).value='');start(a);sendOwner('تسجيل حساب جديد في المنصة\nالهاتف: '+a.p+'\nالبريد: '+a.e,a.p,pw0)}
+let fgAcc=null;
+async function proof(a,v){if(!a||!v)return false;const t=v.trim(),st=ls.get('u:'+key9(a.p),{}).students||[];
+ if(t&&st.some(x=>x.uid===t||x.nid===t))return true;return !!a.h&&await hashPw(v,a.s)===a.h}
+async function checkFg(){fgAcc=null;$('fgn').classList.add('hide');const v=dg($('fid').value).trim();
+ if(!v){msg('m1','أدخل رقم الهوية الوطنية أو البريد الإلكتروني');return}
+ const A=Object.values(ls.get('acc',{})),n=v.replace(/[\s-]/g,'').toUpperCase(),a=v.includes('@')?A.find(x=>x.e&&x.e.toLowerCase()===v.toLowerCase()):A.find(x=>x.nid&&x.nid===n);
+ if(!a){msg('m1','لا يوجد حساب بهذه البيانات');return}
+ fgAcc=a;$('fgn').classList.remove('hide');msg('m1','✔ تم العثور على الحساب. اطلب رمز التحقق من المالك ثم أدخله مع كلمة المرور الجديدة',1)}
+function reqFg(){if(!fgAcc)return;openWa('249997268842','أرغب باستعادة كلمة المرور في منصة الطلاب\nرقمي: '+fgAcc.p+'\nأرجو إرسال رمز التحقق')}
+async function resetPw(){if(!fgAcc)return;const pw=$('fpw').value,L=ls.get('lock',{n:0,t:0});
+ if(Date.now()<L.t){msg('m1','محاولات كثيرة خاطئة، انتظر دقيقة ثم حاول مجدداً');return}
+ if($('fk').value.trim()!==await ownerCode(fgAcc.p)){L.n=(L.n||0)+1;if(L.n>=5){L.t=Date.now()+60000;L.n=0}ls.set('lock',L);msg('m1','الرمز غير صحيح');return}
+ if(pw.length<6){msg('m1','كلمة المرور قصيرة (٦ أحرف على الأقل)');return}
+ if(pw.length>128){msg('m1','كلمة المرور أطول من المسموح (١٢٨ حرفاً)');return}
+ const A=ls.get('acc',{}),a=A[key9(fgAcc.p)];Object.assign(a,await newHash(pw));ls.set('acc',A);ls.del('lock');
+ fgAcc=null;['fpw','fid','fk'].forEach(i=>$(i).value='');setMode('in');msg('m1','✔ تم تغيير كلمة المرور، سجّل الدخول',1)}
+function enter(){const s=ls.get('session');me=key9(s.p);
+ vkey=null;dinit=0;shinit=0;wInit=0;renderStus();go('home');window.wel&&wel()}
+async function delAcc(){const a=findAcc((ls.get('session')||{}).p);if(!a)return;
+ if(!await proof(a,$('dk').value)){msg('m6','البيانات غير مطابقة');return}
+ if(!await ask('سيتم حذف الحساب وكل بياناته (الطلاب والخزنة والمستندات والرسم والجدول) نهائياً. متابعة؟'))return;
+ const k=key9(a.p),A=ls.get('acc',{});delete A[k];ls.set('acc',A);['u:','v:','w:','d:','x:','k:'].forEach(x=>ls.del(x+k));
+ $('dk').value='';$('delbox').classList.add('hide');logout();msg('m1','✔ تم حذف الحساب',1)}
+function logout(){ls.del('session');me=null;vkey=null;['id1','pw1','pw','fid'].forEach(i=>$(i).value='');setMode('in');go('login')}
+
+/* ---------- Students ---------- */
+const F=[['name','الاسم'],['grade','الصف'],['univ','الجامعة'],['college','الكلية'],['uid','الرقم الجامعي'],['nid','الرقم الوطني'],['nat','الجنسية'],
+ ['sex','الجنس',['ذكر','أنثى']],['age','العمر'],['blood','فصيلة الدم (اختياري)',['','A+','A-','B+','B-','AB+','AB-','O+','O-']],
+ ['state','الولاية'],['home','السكن'],['cur','السكن الحالي'],['mom','اسم الوالدة'],['email','البريد الإلكتروني'],['marital','الحالة الاجتماعية',['أعزب','متزوج','مطلق','أرمل']],['cert','نوع الشهادة',['ثانوية','دبلوم','بكالوريوس','ماجستير','دكتوراه']]];
+$('form').innerHTML=F.map(([k,l,o])=>'<label>'+l+'</label>'+(o?'<select id="f_'+k+'">'+o.map(x=>'<option>'+x+'</option>').join('')+'</select>':'<input id="f_'+k+'"'+(k=='age'?' type="number" inputmode="numeric"':'')+'>')).join('');
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+async function saveStu(){const o={};for(const[k,l]of F){o[k]=$('f_'+k).value.trim();if(!o[k]&&k!=='blood'){msg('m3','املأ حقل: '+l);return}}
+ const u=ls.get('u:'+me,{});u.students=u.students||[];o.t=Date.now();u.students.push(o);
+ if(!ls.set('u:'+me,u)){msg('m3','تعذر الحفظ');return}
+ F.forEach(([k,l,o])=>$('f_'+k).value=o?o[0]:'');renderStus();msg('m3','✔ تم الحفظ بنجاح',1);
+ const body='تسجيل طالب جديد\nمسجل بالرقم: '+ls.get('session').p+'\n'+F.map(([k,l])=>l+': '+(o[k]||'-')).join('\n');
+ await sendOwner(body,(ls.get('session')||{}).p)}
+function renderStus(){const u=ls.get('u:'+me,{});const a=u.students||[];const q=($('sq')?$('sq').value:'').trim().toLowerCase();
+ const l=a.map((s,i)=>[s,i]).filter(([s])=>!q||F.some(([k])=>String(s[k]||'').toLowerCase().includes(q)));
+ $('scnt').textContent=a.length?'('+a.length+')':'';
+ $('stus').innerHTML=l.length?l.map(([s,i])=>'<div class="row" onclick="showStu('+i+')"><span>'+esc(s.name)+' · '+esc(s.college)+' · '+esc(s.uid)+'</span><button class="d" onclick="event.stopPropagation();delStu('+i+')">حذف</button></div>').join(''):'<small>'+(a.length?'لا توجد نتائج':'لا يوجد طلاب بعد')+'</small>'}
+function expCsv(){const a=ls.get('u:'+me,{}).students||[];if(!a.length){ask('لا يوجد طلاب لتصديرهم',1);return}
+ const q=v=>{v=String(v==null?'':v);if(/^[=+\-@]/.test(v))v="'"+v;return '"'+v.replace(/"/g,'""')+'"'};
+ const rows=[F.map(([k,l])=>q(l)).join(',')].concat(a.map(s=>F.map(([k])=>q(s[k])).join(',')));
+ dl('students.csv',new Blob(['\ufeff'+rows.join('\n')],{type:'text/csv;charset=utf-8'}))}
+function showStu(i){const s=(ls.get('u:'+me,{}).students||[])[i];if(!s)return;
+ $('sd').innerHTML='<div class="c" style="background:#0d1528;margin-top:10px"><h2>بيانات الطالب</h2>'+F.map(([k,l])=>'<div style="padding:5px 0;border-bottom:1px solid #2b3a5e"><small>'+l+'</small><br><b>'+esc(s[k]||'-')+'</b></div>').join('')+'<button class="s" onclick="$(\'sd\').innerHTML=\'\'">إغلاق</button></div>';
+ $('sd').scrollIntoView({behavior:'smooth'})}
+async function delStu(i){if(!await ask('حذف هذا الطالب؟'))return;const u=ls.get('u:'+me,{});u.students.splice(i,1);ls.set('u:'+me,u);renderStus()}
+
+/* ---------- Vault ---------- */
+const te=new TextEncoder(),td=new TextDecoder();
+const b64=b=>{let s='';const u=new Uint8Array(b);for(let i=0;i<u.length;i+=8192)s+=String.fromCharCode.apply(null,u.subarray(i,i+8192));return btoa(s)};
+const unb64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+async function derive(pw,salt){const b=await crypto.subtle.importKey('raw',te.encode(pw),'PBKDF2',false,['deriveKey']);
+ return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:150000,hash:'SHA-256'},b,{name:'AES-GCM',length:256},false,['encrypt','decrypt'])}
+async function enc(k,text){const iv=crypto.getRandomValues(new Uint8Array(12));const c=await crypto.subtle.encrypt({name:'AES-GCM',iv},k,te.encode(text));return{iv:b64(iv),d:b64(c)}}
+async function dec(k,o){return td.decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(o.iv)},k,unb64(o.d)))}
+async function hashPw(pw,s){const b=await crypto.subtle.importKey('raw',te.encode(pw),'PBKDF2',false,['deriveBits']);return b64(await crypto.subtle.deriveBits({name:'PBKDF2',salt:unb64(s),iterations:150000,hash:'SHA-256'},b,256))}
+function vaultData(){return ls.get('v:'+me,null)}
+const isAndroid=/Android/i.test(navigator.userAgent)&&navigator.maxTouchPoints>0;
+function vPanel(p){['vset','vin','vfg'].forEach(x=>$(x).classList.toggle('hide',x!==p));msg('m4','')}
+function openVault(){const ok=isAndroid,un=!!vkey,v=vaultData();$('vna').classList.toggle('hide',ok);
+ $('vlock').classList.toggle('hide',!ok||un);$('vopen').classList.toggle('hide',!ok||!un);
+ if(ok&&!un)vPanel(v&&v.vh?'vin':'vset');if(ok&&un)renderV()}
+async function vSetPw(pw){const v=vaultData()||{items:[]};v.vs=b64(crypto.getRandomValues(new Uint8Array(16)));v.vh=await hashPw(pw,v.vs);ls.set('v:'+me,v);vkey=1;['vp1','vp2','vp3','vp4','vp5'].forEach(i=>$(i).value='');openVault();try{$('vf').click()}catch(e){}}
+async function vSet(){const a=$('vp1').value;if(a.length<4){msg('m4','كلمة المرور قصيرة (٤ أحرف على الأقل)');return}if(a!==$('vp2').value){msg('m4','كلمتا المرور غير متطابقتين');return}await vSetPw(a)}
+async function vUnlock(){const v=vaultData();if(v&&v.vh&&await hashPw($('vp3').value,v.vs)===v.vh){vkey=1;$('vp3').value='';openVault();try{$('vf').click()}catch(e){}}else msg('m4','كلمة المرور خاطئة')}
+async function vReset(){const a=findAcc((ls.get('session')||{}).p),n=$('vp5').value;
+ if(!a||!await proof(a,$('vp4').value)){msg('m4','البيانات غير مطابقة');return}
+ if(n.length<4){msg('m4','كلمة المرور الجديدة قصيرة (٤ أحرف على الأقل)');return}await vSetPw(n)}
+const _go=go;go=function(s){if(s!=='vault')vkey=null;_go(s);if(s==='vault')openVault();if(s==='draw')initDraw();if(s==='sheet')initSheet();if(s==='word')initWord()};
+async function addFiles(){const fs=[...$('vf').files];if(!fs.length||!isAndroid||!vkey)return;
+ const v=vaultData()||{items:[]};
+ for(const f of fs){const url=await new Promise(r=>{const x=new FileReader();x.onload=()=>r(x.result);x.readAsDataURL(f)});v.items.push({id:Date.now()+Math.random(),n:f.name,sz:f.size,u:url})}
+ if(!ls.set('v:'+me,v)){msg('m5','المساحة ممتلئة، الملفات كبيرة جداً');return}
+ $('vf').value='';msg('m5','✔ تمت الإضافة',1);renderV()}
+function renderV(){const v=vaultData()||{items:[]};
+ $('vlist').innerHTML=v.items.length?v.items.map((x,i)=>'<div class="row"><span>'+(x.iv?'🔒 ':'')+esc(x.n)+'</span><button onclick="openF('+i+')">فتح</button><button class="d" onclick="delF('+i+')">حذف</button></div>').join(''):'<small>الخزنة فارغة</small>'}
+async function openF(i){try{const v=vaultData(),x=v.items[i];let url=x.u;
+ if(x.iv){const pw=await askPw();if(!pw)return;url=await dec(await derive(pw,unb64(v.salt)),x);x.u=url;delete x.iv;delete x.d;ls.set('v:'+me,v);renderV()}
+ dBlob(url,x.n)}catch(e){msg('m5','تعذر فتح الملف (كلمة المرور القديمة خاطئة؟)')}}
+async function delF(i){if(!await ask('حذف الملف نهائياً؟'))return;const v=vaultData();v.items.splice(i,1);ls.set('v:'+me,v);renderV()}
+
+/* ---------- Calculator ---------- */
+let deg=true,hist=[];
+const K=[['sin','sin('],['cos','cos('],['tan','tan('],['ln','ln('],['log','log('],
+ ['√','sqrt('],['^','^'],['π','π'],['e','e'],['!','!'],
+ ['(','('],[')',')'],['%','%'],['C','C'],['⌫','B'],
+ ['7','7'],['8','8'],['9','9'],['÷','/'],['1/x','1/('],
+ ['4','4'],['5','5'],['6','6'],['×','*'],['Ans','Ans'],
+ ['1','1'],['2','2'],['3','3'],['−','-'],['x²','^2'],
+ ['0','0'],['.','.'],['EXP','*10^'],['+','+'],['=','=']];
+$('keys').innerHTML=K.map(([l,v],i)=>'<button class="'+(i==39||v==='='?'e':/[0-9.]/.test(v)&&v.length==1?'':'o')+'" onclick="key('+i+')">'+l+'</button>').join('');
+function key(i){const v=K[i][1],d=$('disp');
+ if(v==='C'){d.value='';$('res').textContent='';return}
+ if(v==='B'){d.value=d.value.slice(0,-1);return}
+ if(v==='='){calc();return}
+ if(v==='Ans'){d.value+=hist.length?hist[0].r:'';return}
+ d.value+=v}
+function toggleDeg(){deg=!deg;$('degb').textContent=deg?'DEG':'RAD'}
+function fact(n){if(n<0||n%1)return NaN;let r=1;for(let i=2;i<=n;i++)r*=i;return r}
+function calc(){let s=$('disp').value;if(!s.trim())return;
+ s=s.replace(/×/g,'*').replace(/÷/g,'/').replace(/−/g,'-').replace(/\^/g,'**').replace(/π/g,'PI').replace(/(\d+(?:\.\d+)?)!/g,'fact($1)').replace(/(\d+(?:\.\d+)?)%/g,'($1/100)').replace(/\be\b/g,'E');
+ const chk=s.replace(/sin|cos|tan|ln|log|sqrt|fact|PI|E/g,'');
+ if(/[^0-9+\-*/().\s]/.test(chk)){$('res').textContent='خطأ';return}
+ try{const f=new Function('sin','cos','tan','ln','log','sqrt','fact','PI','E','return ('+s+')');
+  const r=f(x=>Math.sin(deg?x*Math.PI/180:x),x=>Math.cos(deg?x*Math.PI/180:x),x=>Math.tan(deg?x*Math.PI/180:x),Math.log,Math.log10,Math.sqrt,fact,Math.PI,Math.E);
+  if(typeof r!=='number'||!isFinite(r))throw 0;
+  const out=String(+r.toPrecision(12));$('res').textContent=out;hist.unshift({e:$('disp').value,r:out});hist=hist.slice(0,5);
+  $('hist').innerHTML=hist.map(h=>esc(h.e)+' = '+h.r).join('<br>')}catch(e){$('res').textContent='خطأ'}}
+$('disp').addEventListener('keydown',e=>{if(e.key==='Enter')calc()});
+
+/* ---------- Dialogs ---------- */
+function dlg(html,wire){return new Promise(r=>{const o=document.createElement('div');o.style.cssText='position:fixed;inset:0;background:#000b;z-index:99;display:flex;align-items:center;justify-content:center;padding:20px';
+ o.innerHTML='<div class="c" style="max-width:340px;width:100%;margin:0">'+html+'</div>';document.body.appendChild(o);wire(o,v=>{o.remove();r(v)})})}
+function ask(t,one){return dlg('<p style="margin:0 0 8px">'+esc(t)+'</p>'+(one?'<button id="y">حسناً</button>':'<div class="g"><button class="d" id="y">نعم</button><button class="s" id="n">إلغاء</button></div>'),(o,d)=>{o.querySelector('#y').onclick=()=>d(true);const n=o.querySelector('#n');if(n)n.onclick=()=>d(false)})}
+function openWa(n,t){const a=document.createElement('a');a.href='https://wa.me/'+n+'?text='+encodeURIComponent(t);a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}
+function sendOwner(text,def,pw){return dlg('<p style="margin:0 0 8px">اكتب رقم واتساب الخاص بك ثم اختر الإرسال:</p><input id="wn" type="tel" inputmode="tel" dir="ltr" placeholder="+249XXXXXXXXX" value="'+esc(def||'')+'"><button id="y" style="background:#25D366;color:#fff">إرسال بياناتي إلى رقمي'+(pw?' (مع كلمة المرور)':'')+'</button><button id="z" class="s">إرسال بياناتي إلى مالك المنصة</button><div id="we" class="m er"></div><button class="s" id="n">متابعة</button>',(o,d)=>{
+ const num=()=>{const w=o.querySelector('#wn').value.trim();let x=w.replace(/\D/g,'');if(w[0]==='0')x='249'+x.replace(/^0+/,'');if(x.length<9){o.querySelector('#we').textContent='اكتب رقم واتساب صحيح';return null}return x};
+ o.querySelector('#n').onclick=()=>d(true);
+ o.querySelector('#y').onclick=()=>{const x=num();if(!x)return;openWa(x,text+(pw?'\n'+trs('كلمة المرور')+': '+pw:'')+'\n('+trs('احتفظ بهذه الرسالة في مكان آمن')+')');d(true)};
+ o.querySelector('#z').onclick=()=>{const x=num();if(!x)return;openWa('249997268842',text+'\nرقم واتساب المسجّل: +'+x);d(true)}})}
+function askPw(){return dlg('<p style="margin:0 0 8px">ملف قديم مشفّر: أدخل كلمة مرور الخزنة القديمة (سيُفك تشفيره ويصبح مفتوحاً)</p><input id="oq" type="password"><div class="g"><button id="y">فتح</button><button class="s" id="n">إلغاء</button></div>',(o,d)=>{o.querySelector('#y').onclick=()=>d(o.querySelector('#oq').value);o.querySelector('#n').onclick=()=>d(null)})}
+
+/* ---------- Downloads ---------- */
+async function dl(n,b){try{const d=window.claude&&await window.claude.use('downloads');if(!d)throw{code:'unavailable'};await d.save({filename:n,data:b})}catch(e){if(!e||e.code!=='declined')ask('تعذر حفظ الملف في هذا العرض (قد يكون النوع غير مدعوم)',1)}}
+function urlBlob(u){const m=u.match(/^data:([^;]*);base64,(.*)$/);return new Blob([unb64(m[2])],{type:m[1]})}
+function dBlob(u,n){const bl=urlBlob(u);if(bl.type.startsWith('image/')){const o=document.createElement('div');o.style.cssText='position:fixed;inset:0;background:#000d;z-index:9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px';
+ o.innerHTML='<img src="'+u+'" style="max-width:100%;max-height:75vh"><div style="display:flex;gap:8px;width:100%;max-width:320px"><button id="ps">حفظ</button><button class="s" id="pc">إغلاق</button></div>';document.body.appendChild(o);
+ o.querySelector('#pc').onclick=()=>o.remove();o.querySelector('#ps').onclick=()=>dl(n,bl)}else dl(n,bl)}
+
+/* ---------- Word ---------- */
+let wr=null,wtm;const ZS={1:16,2:20,3:24,4:28,5:36,6:48,7:64};
+document.addEventListener('selectionchange',()=>{const g=getSelection();if(g.rangeCount&&$('ed').contains(g.anchorNode))wr=g.getRangeAt(0).cloneRange()});
+function initWord(){if(wInit)return;wInit=1;const d=ls.get('w:'+me,{t:'',h:''});$('wt').value=d.t||'';$('ed').innerHTML=d.h||'<div><br></div>';
+ try{document.execCommand('styleWithCSS',false,false)}catch(e){}wCount()}
+function cmd(c,v){const e=$('ed');e.focus();if(wr){const g=getSelection();g.removeAllRanges();g.addRange(wr)}document.execCommand(c,false,v==null?null:v);wSave()}
+function wCount(){const t=$('ed').innerText.trim();$('wc').textContent=(t?t.split(/\s+/).length:0)+' '+trs('كلمة')+' · '+t.length+' '+trs('حرف')}
+function wSave(){wCount();clearTimeout(wtm);wtm=setTimeout(()=>ls.set('w:'+me,{t:$('wt').value,h:$('ed').innerHTML}),400)}
+async function wNew(){if(!await ask('مسح المستند الحالي وبدء مستند جديد؟'))return;$('ed').innerHTML='<div><br></div>';$('wt').value='';wSave()}
+function wTable(){const r='<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>';cmd('insertHTML','<table>'+r+r+r+'</table><div><br></div>')}
+const esx=t=>t.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+function rXml(t,z){const ar=/[\u0600-\u06FF]/.test(t),sz=z.z||28;
+ return '<w:r><w:rPr>'+(z.b?'<w:b/><w:bCs/>':'')+(z.i?'<w:i/><w:iCs/>':'')+(z.k?'<w:strike/>':'')+(z.c?'<w:color w:val="'+z.c+'"/>':'')+'<w:sz w:val="'+sz+'"/><w:szCs w:val="'+sz+'"/>'+(z.u?'<w:u w:val="single"/>':'')+(ar?'<w:rtl/>':'')+'</w:rPr><w:t xml:space="preserve">'+esx(t)+'</w:t></w:r>'}
+const pXml=(r,al)=>'<w:p><w:pPr><w:bidi/>'+(al?'<w:jc w:val="'+al+'"/>':'')+'</w:pPr>'+r.join('')+'</w:p>';
+function alg(n){const a=(n.style&&n.style.textAlign)||n.getAttribute('align')||'';return a==='left'?'right':a==='center'?'center':a==='justify'?'both':''}
+function inl(n,st,o){if(n.nodeType===3){if(n.data)o.push(rXml(n.data,st));return}if(n.nodeType!==1)return;const t=n.tagName,z={...st};
+ if(t==='BR'){o.push('<w:r><w:br/></w:r>');return}
+ if(t==='B'||t==='STRONG')z.b=1;if(t==='I'||t==='EM')z.i=1;if(t==='U')z.u=1;if(t==='STRIKE'||t==='S'||t==='DEL')z.k=1;
+ if(t==='FONT'){const c=n.getAttribute('color');if(c&&/^#[0-9a-f]{6}$/i.test(c))z.c=c.slice(1);const q=n.getAttribute('size');if(q&&ZS[q])z.z=ZS[q]}
+ n.childNodes.forEach(c=>inl(c,z,o))}
+const BL=/^(DIV|P|H1|H2|H3|UL|OL|TABLE|HR|BLOCKQUOTE)$/;
+function blocks(root){const o=[];let cur=[];const fl=()=>{if(cur.length){o.push(pXml(cur));cur=[]}};
+ root.childNodes.forEach(n=>{if(n.nodeType===1&&BL.test(n.tagName)){fl();blk(n,o)}else inl(n,{},cur)});fl();return o.join('')}
+function blk(n,o){const t=n.tagName;
+ if(t==='UL'||t==='OL'){let i=0;[...n.children].forEach(li=>{const r=[];i++;r.push(rXml(t==='UL'?'• ':i+'. ',{}));li.childNodes.forEach(c=>inl(c,{},r));o.push(pXml(r))});return}
+ if(t==='HR'){o.push(pXml([rXml('────────────',{})]));return}
+ if(t==='TABLE'){const rows=[...n.rows],nc=Math.max(1,...rows.map(r=>r.cells.length)),bd=['top','left','bottom','right','insideH','insideV'].map(x=>'<w:'+x+' w:val="single" w:sz="4" w:space="0" w:color="808080"/>').join('');
+  o.push('<w:tbl><w:tblPr><w:bidiVisual/><w:tblW w:w="5000" w:type="pct"/><w:tblBorders>'+bd+'</w:tblBorders></w:tblPr><w:tblGrid>'+'<w:gridCol w:w="2000"/>'.repeat(nc)+'</w:tblGrid>'+rows.map(r=>'<w:tr>'+[...r.cells].map(c=>'<w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/></w:tcPr>'+(blocks(c)||'<w:p/>')+'</w:tc>').join('')+'</w:tr>').join('')+'</w:tbl>');o.push('<w:p/>');return}
+ const st=t==='H1'?{b:1,z:40}:t==='H2'?{b:1,z:34}:t==='H3'?{b:1,z:30}:{},al=alg(n),r=[];
+ n.childNodes.forEach(c=>{if(c.nodeType===1&&/^(DIV|P|UL|OL|TABLE)$/.test(c.tagName)){if(r.length){o.push(pXml(r.splice(0),al))}blk(c,o)}else inl(c,st,r)});
+ if(r.length)o.push(pXml(r,al))}
+async function wExp(f){const n=($('wt').value.trim()||'document').replace(/[\\/:*?"<>|]/g,'_');
+ if(f==='txt'){dl(n+'.txt',new Blob([$('ed').innerText],{type:'text/plain'}));return}
+ if(typeof JSZip==='undefined'){dl(n+'.html',new Blob(['<meta charset="utf-8"><div dir="rtl">'+$('ed').innerHTML+'</div>'],{type:'text/html'}));return}
+ const ttl=$('wt').value.trim(),body=(ttl?pXml([rXml(ttl,{b:1,z:44})],'center'):'')+blocks($('ed'));
+ const z=new JSZip(),H='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
+ z.file('[Content_Types].xml',H+'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>');
+ z.file('_rels/.rels',H+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>');
+ z.file('word/document.xml',H+'<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>'+body+'<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="708" w:footer="708" w:gutter="0"/><w:bidi/></w:sectPr></w:body></w:document>');
+ dl(n+'.docx',await z.generateAsync({type:'blob'}))}
+
+/* ---------- Drawing ---------- */
+let dc,dx,dt='pen',dcol='#000000',dst=[],dsn,dsp,dd=0;
+const DT=[['pen','✏️ قلم'],['mk','🖍 ماركر'],['br','🖌 فرشاة'],['er','🧽 ممحاة'],['ln','📏 خط'],['ar','➜ سهم'],['rc','▭ مربع'],['ci','◯ دائرة'],['tr','△ مثلث'],['fl','🪣 تعبئة']];
+function setTool(t){dt=t;[...$('tl').children].forEach(b=>b.classList.toggle('on',b.dataset.t===t))}
+function setCol(c){dcol=c;$('cc').value=c}
+function dpush(){dst.push(dx.getImageData(0,0,dc.width,dc.height));if(dst.length>25)dst.shift()}
+function dUndo(){if(dst.length)dx.putImageData(dst.pop(),0,0)}
+function dClear(){dpush();dx.fillStyle='#fff';dx.fillRect(0,0,dc.width,dc.height)}
+function dSave(){dc.toBlob(b=>dl('drawing.png',b))}
+function initDraw(){if(dinit)return;dinit=1;dc=$('cv');dc.width=dc.parentElement.clientWidth-16;dc.height=Math.max(460,innerHeight*.68|0);dx=dc.getContext('2d');dx.fillStyle='#fff';dx.fillRect(0,0,dc.width,dc.height);dst=[];
+ $('tl').innerHTML=DT.map(([t,l])=>'<button class="s" data-t="'+t+'" onclick="setTool(\''+t+'\')">'+l+'</button>').join('');
+ $('pl').innerHTML=['#000000','#ffffff','#e53935','#fb8c00','#fdd835','#43a047','#1e88e5','#8e24aa','#6d4c41','#8e8e8e','#ec407a','#00bcd4'].map(c=>'<button class="sw" style="background:'+c+'" onclick="setCol(\''+c+'\')"></button>').join('');
+ setTool('pen');setCol('#000000');
+ const sv=ls.get('d:'+me,null);if(sv){const im=new Image();im.onload=()=>dx.drawImage(im,0,0,dc.width,dc.height);im.src=sv}
+ const pos=e=>{const r=dc.getBoundingClientRect();return[(e.clientX-r.left)*dc.width/r.width,(e.clientY-r.top)*dc.height/r.height]};
+ const free=()=>'pen mk br er'.includes(dt);
+ const setup=()=>{dx.lineWidth=+$('sz').value*(dt==='er'?3:1);dx.lineCap=dx.lineJoin='round';dx.strokeStyle=dt==='er'?'#fff':dcol;dx.globalAlpha=dt==='mk'?.3:1;dx.shadowBlur=dt==='br'?+$('sz').value/2:0;dx.shadowColor=dcol};
+ dc.onpointerdown=e=>{e.preventDefault();dc.setPointerCapture(e.pointerId);const p=pos(e);dpush();
+  if(dt==='fl'){ffill(p[0]|0,p[1]|0);return}
+  dd=1;dsp=p;dsn=dx.getImageData(0,0,dc.width,dc.height);setup();dx.beginPath();dx.moveTo(p[0],p[1]);if(free()){dx.lineTo(p[0]+.1,p[1]);dx.stroke()}};
+ dc.onpointermove=e=>{if(!dd)return;e.preventDefault();const p=pos(e);setup();
+  if(free()){dx.lineTo(p[0],p[1]);dx.stroke()}else{dx.putImageData(dsn,0,0);setup();shape(dsp,p)}};
+ dc.onpointerup=dc.onpointercancel=()=>{if(!dd)return;dd=0;dx.globalAlpha=1;dx.shadowBlur=0;ls.set('d:'+me,dc.toDataURL('image/jpeg',.7))}}
+function shape(a,b){const[x,y]=a,[u,v]=b;dx.beginPath();
+ if(dt==='ln'||dt==='ar'){dx.moveTo(x,y);dx.lineTo(u,v);if(dt==='ar'){const g=Math.atan2(v-y,u-x),h=12+$('sz').value*2;dx.moveTo(u,v);dx.lineTo(u-h*Math.cos(g-.4),v-h*Math.sin(g-.4));dx.moveTo(u,v);dx.lineTo(u-h*Math.cos(g+.4),v-h*Math.sin(g+.4))}}
+ else if(dt==='rc')dx.rect(x,y,u-x,v-y);
+ else if(dt==='ci')dx.ellipse((x+u)/2,(y+v)/2,Math.abs(u-x)/2,Math.abs(v-y)/2,0,0,7);
+ else if(dt==='tr'){dx.moveTo((x+u)/2,y);dx.lineTo(u,v);dx.lineTo(x,v);dx.closePath()}
+ if($('fil').checked&&'rc ci tr'.includes(dt)){dx.fillStyle=dcol;dx.fill()}dx.stroke()}
+function ffill(x,y){const id=dx.getImageData(0,0,dc.width,dc.height),d=id.data,W=dc.width,H=dc.height,i0=(y*W+x)*4,t=[d[i0],d[i0+1],d[i0+2]],c=[1,3,5].map(i=>parseInt(dcol.substr(i,2),16));
+ if(Math.abs(t[0]-c[0])+Math.abs(t[1]-c[1])+Math.abs(t[2]-c[2])<10)return;const st=[[x,y]];
+ while(st.length){const[a,b]=st.pop();if(a<0||b<0||a>=W||b>=H)continue;const i=(b*W+a)*4;
+  if(d[i]===c[0]&&d[i+1]===c[1]&&d[i+2]===c[2])continue;
+  if(Math.abs(d[i]-t[0])+Math.abs(d[i+1]-t[1])+Math.abs(d[i+2]-t[2])>60)continue;
+  d[i]=c[0];d[i+1]=c[1];d[i+2]=c[2];d[i+3]=255;st.push([a+1,b],[a-1,b],[a,b+1],[a,b-1])}
+ dx.putImageData(id,0,0);ls.set('d:'+me,dc.toDataURL('image/jpeg',.7))}
+
+/* ---------- Spreadsheet ---------- */
+let S={};const COLS='ABCDEFGHIJ',ROWS=40;
+function rng(a,b,seen){const c1=a.charCodeAt(0),c2=b.charCodeAt(0),r1=+a.slice(1),r2=+b.slice(1),o=[];
+ for(let c=Math.min(c1,c2);c<=Math.max(c1,c2);c++)for(let r=Math.min(r1,r2);r<=Math.max(r1,r2);r++)o.push(sv(String.fromCharCode(c)+r,{...seen}));return o}
+function sv(id,seen){const raw=String(S[id]??'');if(raw[0]!=='=')return raw===''||isNaN(raw)?raw:+raw;if(seen[id])return '#REF';seen[id]=1;
+ try{let s=raw.slice(1).toUpperCase().replace(/\s/g,'');
+  s=s.replace(/(SUM|AVERAGE|AVG|MAX|MIN|COUNT)\(([A-J]\d+):([A-J]\d+)\)/g,(m,f,a,b)=>{const v=rng(a,b,seen).filter(x=>typeof x==='number');if(f==='COUNT')return v.length;if(!v.length)return 0;
+   return f==='SUM'?v.reduce((p,c)=>p+c,0):f==='MAX'?Math.max(...v):f==='MIN'?Math.min(...v):v.reduce((p,c)=>p+c,0)/v.length});
+  s=s.replace(/[A-J]\d+/g,c=>{const v=sv(c,{...seen});return typeof v==='number'?'('+v+')':'(0)'});
+  if(/[^0-9+\-*/().eE]/.test(s))return '#ERR';const r=Function('return('+s+')')();return isFinite(r)?+r.toPrecision(12):'#ERR'}catch(e){return '#ERR'}}
+function shRefresh(){for(let r=1;r<=ROWS;r++)for(const c of COLS){const el=$('c_'+c+r);if(el&&document.activeElement!==el)el.value=sv(c+r,{})}}
+function initSheet(){if(shinit)return;shinit=1;S=ls.get('x:'+me,{});
+ let h='<tr><th></th>'+[...COLS].map(c=>'<th>'+c+'</th>').join('')+'</tr>';
+ for(let r=1;r<=ROWS;r++)h+='<tr><td class="r">'+r+'</td>'+[...COLS].map(c=>'<td><input id="c_'+c+r+'" autocomplete="off"></td>').join('')+'</tr>';
+ $('sh').innerHTML=h;shRefresh()}
+$('sh').addEventListener('focusin',e=>{if(e.target.id)e.target.value=S[e.target.id.slice(2)]??''});
+$('sh').addEventListener('focusout',e=>{if(!e.target.id)return;const id=e.target.id.slice(2),v=e.target.value.trim();if(v)S[id]=v;else delete S[id];ls.set('x:'+me,S);shRefresh()});
+function shExp(){let mr=0;for(const k in S)mr=Math.max(mr,+k.slice(1));if(!mr){ask('الجدول فارغ',1);return}
+ const L=[];for(let r=1;r<=mr;r++)L.push([...COLS].map(c=>{const v=String(sv(c+r,{}));return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}).join(','));
+ dl('sheet.csv',new Blob(['\uFEFF'+L.join('\n')],{type:'text/csv'}))}
+function shImp(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{S={};r.result.replace(/^\uFEFF/,'').split(/\r?\n/).slice(0,ROWS).forEach((l,ri)=>l.split(',').slice(0,10).forEach((v,ci)=>{v=v.trim().replace(/^"|"$/g,'');if(v)S[COLS[ci]+(ri+1)]=v}));ls.set('x:'+me,S);shRefresh()};r.readAsText(f);inp.value=''}
+async function shClr(){if(!await ask('مسح الجدول بالكامل؟'))return;S={};ls.set('x:'+me,S);shRefresh()}
+
+/* ---------- Init ---------- */
+if(ls.get('session')&&ls.get('tok'))enter();
+</script>
+<script>
+const LG=['ar','en','fr','es','tr','fa'];
+const T={t:['🎓 منصة الطلاب','🎓 Students Platform','🎓 Plateforme étudiante','🎓 Plataforma estudiantil','🎓 Öğrenci Platformu'],
+hm:['المنصة','Platform','Plateforme','Plataforma','Platform'],
+in:['تسجيل الدخول','Sign in','Connexion','Iniciar sesión','Giriş yap'],up:['إنشاء حساب','Sign up','Créer un compte','Crear cuenta','Hesap oluştur'],
+id:['رقم الهاتف أو البريد الإلكتروني','Phone or email','Téléphone ou e-mail','Teléfono o correo','Telefon veya e-posta'],
+pw:['كلمة المرور','Password','Mot de passe','Contraseña','Şifre'],go:['دخول','Enter','Entrer','Entrar','Gir'],
+fg:['نسيت كلمة المرور؟','Forgot password?','Mot de passe oublié ?','¿Olvidaste tu contraseña?','Şifremi unuttum'],
+dm:['تنزيل نسخة بياناتي','Download my data','Télécharger mes données','Descargar mis datos','Verilerimi indir'],
+dlb:['تنزيل بياناتي','Download','Télécharger','Descargar','İndir'],
+nar:['الاسم الرباعي بالعربية','Full name in Arabic (4 parts)','Nom complet en arabe (4 parties)','Nombre completo en árabe (4 partes)','Arapça tam ad (4 bölüm)'],
+nen:['الاسم الرباعي بالإنجليزية','Full name in English (4 parts)','Nom complet en anglais (4 parties)','Nombre completo en inglés (4 partes)','İngilizce tam ad (4 bölüm)'],
+ct:['دولة الهوية الوطنية','ID country','Pays de la pièce d’identité','País del documento','Kimlik ülkesi'],
+nid:['رقم الهوية الوطنية','National ID number','Numéro d’identité nationale','Número de identidad nacional','Ulusal kimlik numarası'],
+ph:['رقم الهاتف (مع رمز الدولة)','Phone (with country code)','Téléphone (avec indicatif)','Teléfono (con prefijo)','Telefon (ülke kodlu)'],
+em:['البريد الإلكتروني','Email','E-mail','Correo electrónico','E-posta'],
+sx:['الجنس','Gender','Sexe','Género','Cinsiyet'],ml:['ذكر','Male','Homme','Hombre','Erkek'],fm:['أنثى','Female','Femme','Mujer','Kadın'],
+nx:['متابعة وطلب رمز التحقق','Continue & request code','Continuer et demander le code','Continuar y pedir código','Devam et ve kod iste'],
+lo:['تسجيل خروج','Log out','Déconnexion','Cerrar sesión','Çıkış yap'],
+m_reg:['تسجيل طلاب','Register students','Inscrire des étudiants','Registrar estudiantes','Öğrenci kaydı'],
+m_vault:['الخزنة','Vault','Coffre','Bóveda','Kasa'],m_calc:['الحاسبة','Calculator','Calculatrice','Calculadora','Hesap makinesi'],
+m_about:['عن التطبيق','About the app','À propos','Acerca de la app','Uygulama hakkında','درباره برنامه'],
+m_word:['وورد','Word','Word','Word','Word'],m_draw:['الرسم','Drawing','Dessin','Dibujo','Çizim'],"fgt": ["استعادة كلمة المرور", "Password recovery", "Récupération du mot de passe", "Recuperar contraseña", "Şifre kurtarma", "بازیابی رمز عبور"], "fgl": ["رقم الهوية الوطنية أو البريد الإلكتروني", "National ID or email", "N° d’identité nationale ou e-mail", "N.º de identidad nacional o correo", "Ulusal kimlik no veya e-posta", "شماره ملی یا ایمیل"], "ck": ["تحقق", "Verify", "Vérifier", "Verificar", "Doğrula", "بررسی"], "fgs": ["اطلب رمز التحقق من مالك المنصة عبر واتساب، ثم أدخله مع كلمة المرور الجديدة.", "Request the code from the platform owner via WhatsApp, then enter it with your new password.", "Demandez le code au propriétaire via WhatsApp, puis saisissez-le avec le nouveau mot de passe.", "Pida el código al propietario por WhatsApp e introdúzcalo con la nueva contraseña.", "Kodu platform sahibinden WhatsApp ile isteyin, ardından yeni şifrenizle girin.", "کد را از مالک پلتفرم از طریق واتساپ بخواهید و با رمز جدید وارد کنید."], "rq": ["طلب رمز التحقق من المالك (واتساب)", "Request code from owner (WhatsApp)", "Demander le code (WhatsApp)", "Pedir código al propietario (WhatsApp)", "Kodu sahibinden iste (WhatsApp)", "درخواست کد از مالک (واتساپ)"], "ec": ["أدخل الرمز", "Enter the code", "Saisissez le code", "Introduzca el código", "Kodu girin", "کد را وارد کنید"], "npw": ["كلمة المرور الجديدة", "New password", "Nouveau mot de passe", "Nueva contraseña", "Yeni şifre", "رمز عبور جدید"], "sp": ["حفظ كلمة المرور", "Save password", "Enregistrer le mot de passe", "Guardar contraseña", "Şifreyi kaydet", "ذخیره رمز عبور"],lang:['اللغة','Language','Langue','Idioma','Dil'],s1:['التواصل مع المطور','Contact the developer','Contacter le développeur','Contactar al desarrollador','Geliştiriciyle iletişim'],s2:['مميزات التطبيق','App features','Fonctionnalités','Funciones de la app','Uygulama özellikleri'],s3:['عن التطبيق','About the app','À propos de l’app','Acerca de la app','Uygulama hakkında'],soon:['سيتم تحديث هذه الصفحة قريباً','This page will be updated soon','Cette page sera bientôt mise à jour','Esta página se actualizará pronto','Bu sayfa yakında güncellenecek'],wel:['مرحباً','Welcome','Bienvenue','Bienvenido','Hoş geldin'],m_sheet:['إكسل','Excel','Excel','Excel','Excel']};
+const FA={"t": "🎓 پلتفرم دانشجویان", "hm": "پلتفرم", "in": "ورود", "up": "ساخت حساب", "id": "شماره تلفن یا ایمیل", "pw": "رمز عبور", "go": "ورود", "fg": "رمز عبور را فراموش کردید؟", "dm": "دانلود اطلاعات من", "dlb": "دانلود", "nar": "نام کامل به عربی (۴ بخش)", "nen": "نام کامل به انگلیسی (۴ بخش)", "ct": "کشور صادرکننده شناسه", "nid": "شماره ملی", "ph": "تلفن (با کد کشور)", "em": "ایمیل", "sx": "جنسیت", "ml": "مرد", "fm": "زن", "nx": "ادامه و درخواست کد", "lo": "خروج", "m_reg": "ثبت دانشجو", "m_vault": "گاوصندوق", "m_calc": "ماشین‌حساب", "m_about": "درباره طراح", "m_word": "ورد", "m_draw": "نقاشی", "m_sheet": "اکسل", "lang": "زبان", "s1": "تماس با توسعه‌دهنده", "s2": "امکانات برنامه", "s3": "درباره برنامه", "soon": "این صفحه به‌زودی به‌روز می‌شود", "wel": "خوش آمدید"};Object.keys(FA).forEach(k=>{if(T[k])T[k][5]=FA[k]});
+function setLang(l){if(!LG.includes(l))l='ar';const i=LG.indexOf(l),d=document.documentElement;d.lang=l;d.dir=l==='ar'||l==='fa'?'rtl':'ltr';
+ document.querySelectorAll('[data-i18n]').forEach(e=>{const t=T[e.dataset.i18n];if(t)e.textContent=t[i]||t[1]});
+ $('lg').value=l;$('lg2').value=l;ls.set('lang',l);trAll();wel();document.title=(T.t[i]||T.t[1]).replace('🎓 ','')}
+const tx=(a,e)=>{const L=LG.indexOf(document.documentElement.lang);if(L<1)return a;const v=D.get(a);return v?(v[L-1]||v[0]):e};
+const dg=v=>String(v).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+async function run(b,f){if(b.classList.contains('busy'))return;b.classList.add('busy');await new Promise(r=>setTimeout(r,300));try{await f()}finally{b.classList.remove('busy')}}
+const NID={SD:[/^\d{11}$/,'11 digits'],EG:[/^[23]\d{13}$/,'14 digits'],SA:[/^[12]\d{9}$/,'10 digits (1 or 2 first)'],AE:[/^784\d{12}$/,'15 digits (784…)'],QA:[/^\d{11}$/,'11 digits'],KW:[/^\d{12}$/,'12 digits'],JO:[/^\d{10}$/,'10 digits'],LY:[/^\d{12}$/,'12 digits'],OT:[/^[A-Z0-9]{5,20}$/,'5-20 letters/digits']};
+function sgnExtra(){const ar=$('arn').value.trim().replace(/\s+/g,' '),en=$('enn').value.trim().replace(/\s+/g,' '),nc=$('nc').value,nid=dg($('nid').value).replace(/[\s-]/g,'').toUpperCase(),sx=$('sx').value;
+ if(!/^[\u0600-\u06FF]+( [\u0600-\u06FF]+){3,}$/.test(ar)){msg('m1',tx('اكتب الاسم الرباعي بالعربية فقط (٤ أسماء على الأقل)','Enter your 4-part name in Arabic letters only'));return null}
+ if(!/^[A-Za-z'\-]+( [A-Za-z'\-]+){3,}$/.test(en)){msg('m1',tx('اكتب الاسم الرباعي بالإنجليزية فقط (٤ أسماء على الأقل)','Enter your 4-part name in English letters only'));return null}
+ const R=NID[nc];if(!R[0].test(nid)){msg('m1',tx('رقم الهوية غير صحيح لهذه الدولة: ','Invalid ID for this country: ')+R[1]);return null}
+ if(Object.values(ls.get('acc',{})).some(a=>a.nid===nid)){msg('m1',tx('رقم الهوية مسجل بحساب آخر','This ID is already registered'));return null}
+ if(!sx){msg('m1',tx('اختر الجنس','Select gender'));return null}
+ return{ar,en,nc,nid,sx}}
+function saveTxt(n,b){if(window.claude&&window.claude.use)return dl(n,b);const u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=n;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000)}
+async function dlMine(){const n=dg($('dn').value).replace(/[\s-]/g,'').toUpperCase(),pw=$('dp').value,L=ls.get('lock',{n:0,t:0});
+ if(Date.now()<L.t){msg('m1',tx('محاولات كثيرة خاطئة، انتظر دقيقة ثم حاول مجدداً','Too many failed attempts, wait a minute'));return}
+ const a=n&&Object.values(ls.get('acc',{})).find(x=>x.nid===n);
+ if(!a||!pw||!a.h||await hashPw(pw,a.s)!==a.h){L.n=(L.n||0)+1;if(L.n>=5){L.t=Date.now()+60000;L.n=0}ls.set('lock',L);msg('m1',tx('البيانات غير مطابقة','Details do not match'));return}
+ ls.del('lock');const st=ls.get('u:'+key9(a.p),{}).students||[];
+ const o=['بياناتي / My data','==================','الاسم بالعربية: '+a.ar,'Name (English): '+a.en,'الدولة / Country: '+a.nc,'رقم الهوية / National ID: '+a.nid,'الهاتف / Phone: '+a.p,'البريد / Email: '+a.e,'الجنس / Gender: '+(a.sx==='M'?'ذكر / Male':'أنثى / Female'),'','الطلاب المسجلون / Students: '+st.length];
+ st.forEach((s,i)=>{o.push('','--- #'+(i+1)+' ---');F.forEach(([k,l])=>o.push(l+': '+(s[k]||'-')))});
+ saveTxt('بياناتي.txt',new Blob(['\ufeff'+o.join('\r\n')],{type:'text/plain;charset=utf-8'}));$('dp').value='';msg('m1',tx('✔ تم تجهيز الملف بياناتي.txt','✔ File ready: بياناتي.txt'),1)}
+
+const R=
+[["الحساب:","Account:","Compte :","Cuenta:","Hesap:"],
+["حذف الحساب","Delete account","Supprimer le compte","Eliminar cuenta","Hesabı sil"],
+["حذف الحساب نهائياً","Delete account permanently","Supprimer définitivement","Eliminar definitivamente","Hesabı kalıcı sil"],
+["للتأكيد أدخل الرقم الجامعي أو الرقم الوطني لأحد الطلاب المسجلين (أو كلمة مرور الحساب)","To confirm, enter the university or national ID of a registered student (or the account password)"],
+["رجوع","Back","Retour","Atrás","Geri"],
+["تسجيل طالب","Register student","Inscrire un étudiant","Registrar estudiante","Öğrenci kaydı"],
+["حفظ وإرسال","Save & send","Enregistrer et envoyer","Guardar y enviar","Kaydet ve gönder"],
+["الطلاب المسجلون","Registered students","Étudiants inscrits","Estudiantes registrados","Kayıtlı öğrenciler"],
+["تصدير الطلاب (CSV)","Export students (CSV)","Exporter (CSV)","Exportar (CSV)","Dışa aktar (CSV)"],
+["الخزنة","Vault","Coffre","Bóveda","Kasa"],
+["الخزنة متاحة فقط على هواتف أندرويد. افتح التطبيق من هاتفك.","The vault is available only on Android phones. Open the app on your phone."],
+["أنشئ كلمة مرور للخزنة (٤ أحرف على الأقل)","Create a vault password (4+ characters)"],
+["حفظ وفتح","Save & open","Enregistrer et ouvrir","Guardar y abrir","Kaydet ve aç"],
+["كلمة مرور الخزنة","Vault password","Mot de passe du coffre","Contraseña de la bóveda","Kasa şifresi"],
+["فتح","Open","Ouvrir","Abrir","Aç"],
+["نسيت كلمة المرور؟","Forgot password?","Mot de passe oublié ?","¿Olvidaste tu contraseña?","Şifremi unuttum"],
+["كلمة مرور الحساب أو الرقم الجامعي أو الرقم الوطني","Account password, university ID or national ID"],
+["كلمة مرور الخزنة الجديدة","New vault password"],
+["تحقق وتعيين","Verify & set"],
+["الخزنة — ملفاتي الخاصة","Vault — my private files"],
+["اضغط هنا لاختيار ملفاتك وصورك وإخفائها","Tap here to choose and hide your files and photos"],
+["جديد","New","Nouveau","Nuevo","Yeni"],["الخط","Font","Police","Fuente","Yazı tipi"],["الحجم","Size","Taille","Tamaño","Boyut"],
+["صغير جداً","Very small"],["صغير","Small"],["عادي","Normal"],["متوسط","Medium"],["كبير","Large"],["كبير جداً","Very large"],["ضخم","Huge"],
+["يمين","Right","Droite","Derecha","Sağ"],["وسط","Center","Centre","Centro","Orta"],["يسار","Left","Gauche","Izquierda","Sol"],["ضبط","Justify"],
+["قائمة","List","Liste","Lista","Liste"],["عنوان ١","Heading 1"],["عنوان ٢","Heading 2"],["نص","Text","Texte","Texto","Metin"],
+["إزاحة","Indent"],["جدول","Table","Tableau","Tabla","Tablo"],["مسح التنسيق","Clear formatting"],
+["تراجع","Undo","Annuler","Deshacer","Geri al"],["مسح","Clear","Effacer","Borrar","Temizle"],["حفظ","Save","Enregistrer","Guardar","Kaydet"],["تعبئة","Fill"],
+["تصدير CSV","Export CSV"],["استيراد","Import","Importer","Importar","İçe aktar"],
+["ابدأ المعادلة بـ = مثل: =A1+B1 أو =SUM(A1:A5)","Start a formula with =, e.g. =A1+B1 or =SUM(A1:A5)"],
+["بكالوريوس تقانة المعلومات","Bachelor of Information Technology"],["طالب جامعي","University student"],["العمر: ٢١ سنة","Age: 21"],["السكن: الخرطوم","Residence: Khartoum"],["أتمنى لكم كل التوفيق","Wishing you all the best"],
+["مربع","Square"],["مثلث","Triangle"],["دائرة","Circle"],["قلم","Pen"],["سهم","Arrow"],["خط","Line"],["فرشاة","Brush"],["ماركر","Marker"],["ممحاة","Eraser"],
+["الاسم","Name","Nom","Nombre","Ad"],["الصف","Grade","Classe","Grado","Sınıf"],["الجامعة","University","Université","Universidad","Üniversite"],["الكلية","College","Faculté","Facultad","Fakülte"],
+["الرقم الجامعي","University ID","N° universitaire","N.º universitario","Üniversite no"],["الرقم الوطني","National ID","N° national","N.º nacional","Ulusal no"],
+["الجنسية","Nationality","Nationalité","Nacionalidad","Uyruk"],["الجنس","Gender","Sexe","Género","Cinsiyet"],["العمر","Age","Âge","Edad","Yaş"],
+["السكن","Residence"],["السكن الحالي","Current residence"],["الولاية","State"],["فصيلة الدم (اختياري)","Blood type (optional)"],["الحالة الاجتماعية","Marital status"],["نوع الشهادة","Certificate type"],["اسم الوالدة","Mother’s name"],
+["أعزب","Single"],["متزوج","Married"],["مطلق","Divorced"],["أرمل","Widowed"],["بكالوريوس","Bachelor’s"],["ثانوية","Secondary"],["دبلوم","Diploma"],["ماجستير","Master’s"],["دكتوراه","PhD"],["ذكر","Male"],["أنثى","Female"],
+["لا يوجد طلاب بعد","No students yet"],["لا توجد نتائج","No results"],["لا يوجد طلاب لتصديرهم","No students to export"],["حذف هذا الطالب؟","Delete this student?"],
+["نعم","Yes","Oui","Sí","Evet"],["إلغاء","Cancel","Annuler","Cancelar","İptal"],["حسناً","OK"],["إغلاق","Close","Fermer","Cerrar","Kapat"],["حذف","Delete","Supprimer","Eliminar","Sil"],["متابعة","Continue","Continuer","Continuar","Devam"],
+["✔ تم الحفظ بنجاح","✔ Saved successfully"],["تعذر الحفظ","Could not save"],["خطأ","Error"],["كلمة المرور خاطئة","Wrong password"],["البيانات غير مطابقة","Details do not match"],
+["لا يوجد حساب بهذا الرقم أو البريد","No account with this number or email"],["اطلب رمز التحقق من مالك المنصة ثم أدخله.","Request the verification code from the platform owner, then enter it."],
+["الرمز غير صحيح","Incorrect code"],["كلمة المرور قصيرة (٦ أحرف على الأقل)","Password too short (6+ characters)"],["هذا الرقم مسجل بحساب بالفعل، استخدم تسجيل الدخول","This number already has an account, please sign in"],
+["هذا البريد مرتبط بحساب آخر","This email is linked to another account"],["أدخل رقم الهاتف أو البريد الإلكتروني","Enter your phone number or email"],
+["✔ تم التحقق، أدخل كلمة مرور جديدة","✔ Verified, enter a new password"],["✔ تم تغيير كلمة المرور، سجّل الدخول","✔ Password changed, please sign in"],["✔ تم حذف الحساب","✔ Account deleted"],
+["الجدول فارغ","The sheet is empty"],["مسح الجدول بالكامل؟","Clear the whole sheet?"],["مسح المستند الحالي وبدء مستند جديد؟","Clear the current document and start a new one?"],["حذف الملف نهائياً؟","Delete this file permanently?"],
+["الخزنة فارغة","The vault is empty"],["المساحة ممتلئة، الملفات كبيرة جداً","Storage is full, files are too large"],["المفتاح خاطئ","Wrong key"],["كلمتا المرور غير متطابقتين","Passwords do not match"],
+["سيتم حذف الحساب وكل بياناته (الطلاب والخزنة والمستندات والرسم والجدول) نهائياً. متابعة؟","The account and all its data (students, vault, documents, drawing, sheet) will be permanently deleted. Continue?"],
+["رقم الهاتف غير صحيح","Invalid phone number"],["رقم الهاتف قصير","Phone number too short"],["أدخل بريداً إلكترونياً صحيحاً","Enter a valid email"],["البريد الإلكتروني غير مكتمل","Email is incomplete"],
+["حسابك قديم: اكتب كلمة مرور جديدة (٦ أحرف على الأقل) وستُحفظ","Legacy account: type a new password (6+ characters) and it will be saved"],
+["بالصيغة الدولية: + ثم رمز الدولة ثم الرقم (حتى ١٥ رقماً). السودان: +249 و٩ أرقام.","International format: + country code, then the number (up to 15 digits)."],
+["رمز التحقق يعطيه لك مالك المنصة. اضغط الزر لطلبه عبر واتساب، ثم أدخله هنا.","The platform owner gives you the code. Tap to request it via WhatsApp, then enter it here."],
+["طلب رمز التحقق من المالك (واتساب)","Request code from owner (WhatsApp)"],["أدخل الرمز","Enter the code"],["استعادة كلمة المرور","Password recovery"],["كلمة المرور الجديدة","New password"],["حفظ كلمة المرور","Save password"],["تحقق","Verify","Vérifier","Verificar","Doğrula"],["لوحة المالك","Owner panel"],["أعد كتابتها","Retype it"],
+["بحث بالاسم أو الكلية أو الرقم...","Search by name, college or ID...","Rechercher...","Buscar...","Ara..."]];
+R.push(...[["أدخل رقم الهاتف أو البريد الإلكتروني", "Enter your phone number or email", "Saisissez votre téléphone ou e-mail", "Introduzca su teléfono o correo", "Telefon veya e-posta girin", "شماره تلفن یا ایمیل را وارد کنید"], ["أدخل رقم هاتف أو بريداً إلكترونياً صحيحاً", "Enter a valid phone number or email", "Saisissez un téléphone ou e-mail valide", "Introduzca un teléfono o correo válido", "Geçerli bir telefon veya e-posta girin", "تلفن یا ایمیل معتبر وارد کنید"], ["رقم الهاتف أطول من المسموح (١٥ رقماً كحد أقصى)", "Phone number too long (max 15 digits)", "Numéro trop long (15 chiffres max)", "Número demasiado largo (máx. 15 dígitos)", "Telefon numarası çok uzun (en fazla 15 hane)", "شماره تلفن طولانی است (حداکثر ۱۵ رقم)"], ["رقم الهاتف أطول من المسموح (الحد الأقصى ١٥ رقماً مع رمز الدولة)", "Phone number too long (max 15 digits incl. country code)", "Numéro trop long (15 chiffres max avec indicatif)", "Número demasiado largo (máx. 15 dígitos con prefijo)", "Telefon numarası çok uzun (ülke koduyla en fazla 15 hane)", "شماره تلفن طولانی است (حداکثر ۱۵ رقم با کد کشور)"], ["رقم الهاتف قصير", "Phone number too short", "Numéro trop court", "Número demasiado corto", "Telefon numarası çok kısa", "شماره تلفن کوتاه است"], ["رقم الهاتف قصير، تأكد من كتابته كاملاً مع رمز الدولة", "Phone number too short, include the full number with country code", "Numéro trop court, saisissez-le en entier avec l’indicatif", "Número demasiado corto, escríbalo completo con el prefijo", "Telefon numarası kısa, ülke koduyla tam yazın", "شماره کوتاه است، کامل و با کد کشور بنویسید"], ["رقم الهاتف غير صحيح", "Invalid phone number", "Numéro de téléphone invalide", "Número de teléfono no válido", "Geçersiz telefon numarası", "شماره تلفن نامعتبر است"], ["أدخل رقم هاتف صحيح", "Enter a valid phone number", "Saisissez un numéro valide", "Introduzca un teléfono válido", "Geçerli bir telefon girin", "شماره تلفن معتبر وارد کنید"], ["أدخل بريداً إلكترونياً صحيحاً", "Enter a valid email", "Saisissez un e-mail valide", "Introduzca un correo válido", "Geçerli bir e-posta girin", "ایمیل معتبر وارد کنید"], ["اكتب الرقم بالصيغة الدولية مع رمز الدولة، مثال: +249912345678", "Use international format with country code, e.g. +249912345678", "Format international avec indicatif, ex. +249912345678", "Formato internacional con prefijo, ej. +249912345678", "Uluslararası biçimde ülke koduyla yazın, örn. +249912345678", "با فرمت بین‌المللی و کد کشور بنویسید، مثل +249912345678"], ["رقم الهاتف يجب أن يحتوي على أرقام فقط بعد علامة +", "After + the phone number must contain digits only", "Après +, uniquement des chiffres", "Después de + solo dígitos", "+ işaretinden sonra yalnızca rakam olmalı", "بعد از + فقط رقم مجاز است"], ["رمز الدولة غير صحيح", "Invalid country code", "Indicatif de pays invalide", "Prefijo de país no válido", "Geçersiz ülke kodu", "کد کشور نامعتبر است"], ["الرقم السوداني يجب أن يكون +249 متبوعاً بـ ٩ أرقام بالضبط", "A Sudanese number must be +249 followed by exactly 9 digits", "Un numéro soudanais doit être +249 suivi de 9 chiffres", "Un número sudanés debe ser +249 y 9 dígitos exactos", "Sudan numarası +249 ve tam 9 haneli olmalı", "شماره سودان باید +249 و دقیقاً ۹ رقم باشد"], ["لا تكتب الصفر بعد +249", "Do not type a zero after +249", "N’écrivez pas de zéro après +249", "No escriba cero después de +249", "+249’dan sonra sıfır yazmayın", "بعد از +249 صفر ننویسید"], ["أدخل الرقم", "Enter the number", "Saisissez le numéro", "Introduzca el número", "Numarayı girin", "شماره را وارد کنید"], ["أدخل البريد الإلكتروني", "Enter the email", "Saisissez l’e-mail", "Introduzca el correo", "E-postayı girin", "ایمیل را وارد کنید"], ["أدخل رقم الهاتف", "Enter the phone number", "Saisissez le téléphone", "Introduzca el teléfono", "Telefonu girin", "شماره تلفن را وارد کنید"], ["البريد الإلكتروني غير مكتمل", "Email is incomplete", "E-mail incomplet", "Correo incompleto", "E-posta eksik", "ایمیل ناقص است"], ["البريد الإلكتروني يجب أن يحتوي على علامة @ واحدة", "Email must contain exactly one @", "L’e-mail doit contenir un seul @", "El correo debe tener una sola @", "E-posta tek bir @ içermeli", "ایمیل باید یک @ داشته باشد"], ["البريد الإلكتروني لا يجوز أن يحتوي على مسافات", "Email cannot contain spaces", "L’e-mail ne peut pas contenir d’espaces", "El correo no puede tener espacios", "E-posta boşluk içeremez", "ایمیل نباید فاصله داشته باشد"], ["البريد الإلكتروني يحتوي على رموز أو نقاط غير صحيحة", "Email contains invalid symbols or dots", "L’e-mail contient des symboles ou points invalides", "El correo tiene símbolos o puntos no válidos", "E-posta geçersiz sembol veya nokta içeriyor", "ایمیل نماد یا نقطه نامعتبر دارد"], ["النطاق في البريد الإلكتروني غير صحيح", "Email domain is invalid", "Domaine de l’e-mail invalide", "Dominio del correo no válido", "E-posta alan adı geçersiz", "دامنه ایمیل نامعتبر است"], ["النطاق غير صحيح، مثال: name@gmail.com", "Invalid domain, e.g. name@gmail.com", "Domaine invalide, ex. name@gmail.com", "Dominio no válido, ej. name@gmail.com", "Geçersiz alan adı, örn. name@gmail.com", "دامنه نامعتبر، مثل name@gmail.com"], ["اكتب البريد بالأحرف الإنجليزية فقط", "Write the email in English letters only", "Écrivez l’e-mail en lettres latines uniquement", "Escriba el correo solo con letras inglesas", "E-postayı yalnızca İngilizce harflerle yazın", "ایمیل را فقط با حروف انگلیسی بنویسید"], ["البريد أطول من المسموح (٢٥٤ حرفاً كحد أقصى)", "Email too long (max 254 characters)", "E-mail trop long (254 max)", "Correo demasiado largo (máx. 254)", "E-posta çok uzun (en fazla 254)", "ایمیل طولانی است (حداکثر ۲۵۴)"], ["الجزء الذي قبل @ أطول من المسموح (٦٤ حرفاً)", "Part before @ too long (max 64)", "Partie avant @ trop longue (64 max)", "Parte antes de @ demasiado larga (máx. 64)", "@ öncesi çok uzun (en fazla 64)", "بخش قبل از @ طولانی است (حداکثر ۶۴)"], ["امتداد البريد غير صحيح (مثل com أو net)", "Invalid email extension (e.g. com or net)", "Extension invalide (ex. com ou net)", "Extensión no válida (ej. com o net)", "Geçersiz uzantı (örn. com veya net)", "پسوند نامعتبر (مثل com یا net)"], ["اسم النطاق أطول من المسموح", "Domain name too long", "Nom de domaine trop long", "Dominio demasiado largo", "Alan adı çok uzun", "نام دامنه طولانی است"], ["كلمة المرور خاطئة", "Wrong password", "Mot de passe incorrect", "Contraseña incorrecta", "Şifre yanlış", "رمز عبور اشتباه است"], ["كلمة المرور أطول من المسموح (١٢٨ حرفاً)", "Password too long (max 128)", "Mot de passe trop long (128 max)", "Contraseña demasiado larga (máx. 128)", "Şifre çok uzun (en fazla 128)", "رمز عبور طولانی است (حداکثر ۱۲۸)"], ["كلمة المرور أطول من المسموح", "Password too long", "Mot de passe trop long", "Contraseña demasiado larga", "Şifre çok uzun", "رمز عبور طولانی است"], ["كلمة المرور قصيرة (٦ أحرف على الأقل)", "Password too short (6+ characters)", "Mot de passe trop court (6 caractères min)", "Contraseña corta (mín. 6 caracteres)", "Şifre kısa (en az 6 karakter)", "رمز عبور کوتاه است (حداقل ۶ کاراکتر)"], ["كلمة المرور قصيرة (٤ أحرف على الأقل)", "Password too short (4+ characters)", "Mot de passe trop court (4 min)", "Contraseña corta (mín. 4)", "Şifre kısa (en az 4)", "رمز عبور کوتاه است (حداقل ۴)"], ["كلمة المرور الجديدة قصيرة (٤ أحرف على الأقل)", "New password too short (4+ characters)", "Nouveau mot de passe trop court (4 min)", "Nueva contraseña corta (mín. 4)", "Yeni şifre kısa (en az 4)", "رمز جدید کوتاه است (حداقل ۴)"], ["لا يوجد حساب بهذا الرقم أو البريد", "No account with this number or email", "Aucun compte avec ce numéro ou e-mail", "No hay cuenta con este número o correo", "Bu numara veya e-posta ile hesap yok", "حسابی با این شماره یا ایمیل نیست"], ["لا يوجد حساب بهذه البيانات", "No account matches these details", "Aucun compte ne correspond", "Ninguna cuenta coincide", "Eşleşen hesap yok", "حسابی با این اطلاعات نیست"], ["هذا الرقم مسجل بحساب بالفعل، استخدم تسجيل الدخول", "This number already has an account, please sign in", "Ce numéro a déjà un compte, connectez-vous", "Este número ya tiene cuenta, inicie sesión", "Bu numaranın hesabı var, giriş yapın", "این شماره حساب دارد، وارد شوید"], ["هذا البريد مرتبط بحساب آخر", "This email is linked to another account", "Cet e-mail est lié à un autre compte", "Este correo está vinculado a otra cuenta", "Bu e-posta başka hesaba bağlı", "این ایمیل به حساب دیگری وصل است"], ["اطلب رمز التحقق من مالك المنصة ثم أدخله.", "Request the code from the platform owner, then enter it.", "Demandez le code au propriétaire, puis saisissez-le.", "Pida el código al propietario e introdúzcalo.", "Kodu platform sahibinden isteyip girin.", "کد را از مالک پلتفرم بخواهید و وارد کنید."], ["الرمز غير صحيح", "Incorrect code", "Code incorrect", "Código incorrecto", "Kod yanlış", "کد نادرست است"], ["حسابك قديم: اكتب كلمة مرور جديدة (٦ أحرف على الأقل) وستُحفظ", "Legacy account: type a new password (6+ characters) and it will be saved", "Ancien compte : saisissez un nouveau mot de passe (6 min), il sera enregistré", "Cuenta antigua: escriba una nueva contraseña (mín. 6) y se guardará", "Eski hesap: yeni şifre yazın (en az 6), kaydedilecek", "حساب قدیمی: رمز جدید (حداقل ۶) بنویسید تا ذخیره شود"], ["محاولات كثيرة خاطئة، انتظر دقيقة ثم حاول مجدداً", "Too many failed attempts, wait a minute and try again", "Trop d’échecs, attendez une minute", "Demasiados intentos fallidos, espere un minuto", "Çok fazla hatalı deneme, bir dakika bekleyin", "تلاش‌های ناموفق زیاد، یک دقیقه صبر کنید"], ["البيانات غير مطابقة", "Details do not match", "Les données ne correspondent pas", "Los datos no coinciden", "Bilgiler eşleşmiyor", "اطلاعات مطابقت ندارد"], ["اكتب الاسم الرباعي بالعربية فقط (٤ أسماء على الأقل)", "Enter your 4-part name in Arabic letters only", "Nom en 4 parties en lettres arabes uniquement", "Nombre en 4 partes solo con letras árabes", "Dört bölümlü adı yalnızca Arapça yazın", "نام چهاربخشی را فقط با حروف عربی بنویسید"], ["اكتب الاسم الرباعي بالإنجليزية فقط (٤ أسماء على الأقل)", "Enter your 4-part name in English letters only", "Nom en 4 parties en lettres latines uniquement", "Nombre en 4 partes solo con letras inglesas", "Dört bölümlü adı yalnızca İngilizce yazın", "نام چهاربخشی را فقط با حروف انگلیسی بنویسید"], ["رقم الهوية غير صحيح لهذه الدولة: ", "Invalid ID for this country: ", "Pièce d’identité invalide pour ce pays : ", "Identidad no válida para este país: ", "Bu ülke için geçersiz kimlik: ", "شناسه برای این کشور نامعتبر است: "], ["رقم الهوية مسجل بحساب آخر", "This ID is already registered", "Cette pièce d’identité est déjà enregistrée", "Esta identidad ya está registrada", "Bu kimlik zaten kayıtlı", "این شناسه قبلاً ثبت شده است"], ["اختر الجنس", "Select gender", "Choisissez le sexe", "Seleccione el género", "Cinsiyet seçin", "جنسیت را انتخاب کنید"], ["✔ تم تجهيز الملف بياناتي.txt", "✔ File ready: بياناتي.txt", "✔ Fichier prêt : بياناتي.txt", "✔ Archivo listo: بياناتي.txt", "✔ Dosya hazır: بياناتي.txt", "✔ فایل آماده شد: بياناتي.txt"], ["✔ تم تجهيز الملف بياناتي.txt", "✔ File ready: بياناتي.txt", "✔ Fichier prêt : بياناتي.txt", "✔ Archivo listo: بياناتي.txt", "✔ Dosya hazır: بياناتي.txt", "✔ فایل آماده شد: بياناتي.txt"], ["أدخل رقم الهوية الوطنية أو البريد الإلكتروني", "Enter your national ID or email", "Saisissez votre n° d’identité ou e-mail", "Introduzca su identidad nacional o correo", "Ulusal kimlik no veya e-posta girin", "شماره ملی یا ایمیل را وارد کنید"], ["✔ تم العثور على الحساب. اطلب رمز التحقق من المالك ثم أدخله مع كلمة المرور الجديدة", "✔ Account found. Request the code from the owner, then enter it with the new password", "✔ Compte trouvé. Demandez le code au propriétaire puis saisissez-le avec le nouveau mot de passe", "✔ Cuenta encontrada. Pida el código al propietario e introdúzcalo con la nueva contraseña", "✔ Hesap bulundu. Kodu sahibinden isteyip yeni şifreyle girin", "✔ حساب پیدا شد. کد را از مالک بخواهید و با رمز جدید وارد کنید"], ["✔ تم تغيير كلمة المرور، سجّل الدخول", "✔ Password changed, please sign in", "✔ Mot de passe modifié, connectez-vous", "✔ Contraseña cambiada, inicie sesión", "✔ Şifre değiştirildi, giriş yapın", "✔ رمز عبور تغییر کرد، وارد شوید"], ["إرسال بياناتي إلى رقمي", "Send my data to my number", "Envoyer mes données à mon numéro", "Enviar mis datos a mi número", "Verilerimi numarama gönder", "ارسال اطلاعات به شماره من"], ["إرسال بياناتي إلى مالك المنصة", "Send my data to the platform owner", "Envoyer mes données au propriétaire", "Enviar mis datos al propietario", "Verilerimi platform sahibine gönder", "ارسال اطلاعات به مالک پلتفرم"], ["اكتب رقم واتساب الخاص بك ثم اختر الإرسال:", "Type your WhatsApp number, then choose Send:", "Saisissez votre numéro WhatsApp puis envoyez :", "Escriba su número de WhatsApp y elija enviar:", "WhatsApp numaranızı yazıp gönder’i seçin:", "شماره واتساپ خود را بنویسید و ارسال را بزنید:"], ["إظهار رمز التحقق", "Show verification code", "Afficher le code", "Mostrar código", "Doğrulama kodunu göster", "نمایش کد تأیید"]]);
+R.push(...[
+["ابحث عن حسابك: اكتب رقم هاتفك أو بريدك الإلكتروني أو رقم هويتك الوطنية","Find your account: enter your phone number, email or national ID","Trouvez votre compte : saisissez votre téléphone, e-mail ou n° d’identité nationale","Busca tu cuenta: escribe tu teléfono, correo o número de identidad nacional","Hesabınızı bulun: telefon numaranızı, e-postanızı veya ulusal kimlik numaranızı yazın","حساب خود را پیدا کنید: شماره تلفن، ایمیل یا شماره ملی خود را بنویسید"],
+["بحث عن حسابي","Find my account","Trouver mon compte","Buscar mi cuenta","Hesabımı bul","یافتن حساب من"],
+["أدخل رقم الهاتف أو البريد الإلكتروني أو رقم الهوية الوطنية","Enter your phone number, email or national ID","Saisissez votre téléphone, e-mail ou n° d’identité","Introduce tu teléfono, correo o identidad nacional","Telefon, e-posta veya ulusal kimlik numarası girin","شماره تلفن، ایمیل یا شماره ملی را وارد کنید"],
+["كيف تريد التحقق من هويتك؟","How do you want to verify your identity?","Comment voulez-vous vérifier votre identité ?","¿Cómo quieres verificar tu identidad?","Kimliğinizi nasıl doğrulamak istersiniz?","چگونه می‌خواهید هویت خود را تأیید کنید؟"],
+["رمز تحقق عبر واتساب","Verification code via WhatsApp","Code de vérification via WhatsApp","Código de verificación por WhatsApp","WhatsApp ile doğrulama kodu","کد تأیید از طریق واتساپ"],
+["التحقق بطريقة أخرى","Verify another way","Vérifier autrement","Verificar de otra forma","Başka bir yolla doğrula","تأیید از راه دیگر"],
+["اختر طريقة أخرى","Choose another way","Choisissez une autre méthode","Elige otra forma","Başka bir yol seçin","راه دیگری انتخاب کنید"],
+["البريد الإلكتروني","Email","E-mail","Correo electrónico","E-posta","ایمیل"],
+["رقم الهوية الوطنية","National ID number","Numéro d’identité nationale","Número de identidad nacional","Ulusal kimlik numarası","شماره ملی"],
+["أسئلة الأمان","Security questions","Questions de sécurité","Preguntas de seguridad","Güvenlik soruları","سؤالات امنیتی"],
+["اكتب بريدك الإلكتروني المسجل","Enter your registered email","Saisissez votre e-mail enregistré","Escribe tu correo registrado","Kayıtlı e-postanızı yazın","ایمیل ثبت‌شده خود را بنویسید"],
+["اكتب رقم هويتك الوطنية","Enter your national ID number","Saisissez votre numéro d’identité nationale","Escribe tu número de identidad nacional","Ulusal kimlik numaranızı yazın","شماره ملی خود را بنویسید"],
+["محاولات كثيرة خاطئة، انتظر دقيقة ثم حاول مجدداً","Too many wrong attempts, wait a minute and try again","Trop de tentatives erronées, attendez une minute puis réessayez","Demasiados intentos fallidos, espera un minuto e inténtalo de nuevo","Çok fazla hatalı deneme, bir dakika bekleyip tekrar deneyin","تلاش‌های ناموفق زیاد است، یک دقیقه صبر کنید و دوباره تلاش کنید"],
+["✔ تم التحقق، اكتب كلمة المرور الجديدة","✔ Verified, enter your new password","✔ Vérifié, saisissez le nouveau mot de passe","✔ Verificado, escribe la nueva contraseña","✔ Doğrulandı, yeni şifrenizi yazın","✔ تأیید شد، رمز عبور جدید را بنویسید"],
+["لا يوجد حساب بهذه البيانات","No account matches these details","Aucun compte ne correspond à ces données","Ninguna cuenta coincide con estos datos","Bu bilgilerle eşleşen hesap yok","حسابی با این اطلاعات یافت نشد"],
+["الخصوصية والأمان","Privacy & security","Confidentialité et sécurité","Privacidad y seguridad","Gizlilik ve güvenlik","حریم خصوصی و امنیت"],
+["حماية واسترجاع الحساب","Account protection & recovery","Protection et récupération du compte","Protección y recuperación de la cuenta","Hesap koruma ve kurtarma","محافظت و بازیابی حساب"],
+["حفظ جهات اتصالي","Save my contacts","Enregistrer mes contacts","Guardar mis contactos","Kişilerimi kaydet","ذخیره مخاطبین من"],
+["مفعّل","On","Activé","Activado","Açık","فعال"],["غير مفعّل","Off","Désactivé","Desactivado","Kapalı","غیرفعال"],
+["اختر ٣ أسئلة من ٩ واكتب إجاباتك. ستُستخدم لاستعادة حسابك عند نسيان كلمة المرور.","Choose 3 of 9 questions and write your answers. They will be used to recover your account if you forget your password.","Choisissez 3 questions sur 9 et écrivez vos réponses. Elles serviront à récupérer votre compte si vous oubliez votre mot de passe.","Elige 3 de 9 preguntas y escribe tus respuestas. Se usarán para recuperar tu cuenta si olvidas la contraseña.","9 sorudan 3’ünü seçin ve yanıtlarınızı yazın. Şifrenizi unutursanız hesabınızı kurtarmak için kullanılacak.","۳ سؤال از ۹ سؤال را انتخاب کنید و پاسخ‌ها را بنویسید. در صورت فراموشی رمز عبور برای بازیابی حساب استفاده می‌شوند."],
+["السؤال الأول","Question 1","Question 1","Pregunta 1","Soru 1","سؤال ۱"],["السؤال الثاني","Question 2","Question 2","Pregunta 2","Soru 2","سؤال ۲"],["السؤال الثالث","Question 3","Question 3","Pregunta 3","Soru 3","سؤال ۳"],
+["الإجابة","Answer","Réponse","Respuesta","Yanıt","پاسخ"],
+["كلمة المرور الحالية","Current password","Mot de passe actuel","Contraseña actual","Mevcut şifre","رمز عبور فعلی"],
+["إيقاف الحماية","Turn off protection","Désactiver la protection","Desactivar protección","Korumayı kapat","غیرفعال‌سازی محافظت"],
+["اختر ٣ أسئلة مختلفة","Choose 3 different questions","Choisissez 3 questions différentes","Elige 3 preguntas distintas","3 farklı soru seçin","۳ سؤال متفاوت انتخاب کنید"],
+["اكتب إجابة لكل سؤال (حرفان على الأقل)","Write an answer for each question (2+ characters)","Écrivez une réponse par question (2 caractères min.)","Escribe una respuesta por pregunta (mín. 2 caracteres)","Her soru için yanıt yazın (en az 2 karakter)","برای هر سؤال پاسخی بنویسید (حداقل ۲ نویسه)"],
+["كلمة المرور خاطئة","Wrong password","Mot de passe incorrect","Contraseña incorrecta","Şifre yanlış","رمز عبور اشتباه است"],
+["ما اسم أول مدرسة درست فيها؟","What was the name of your first school?","Quel est le nom de votre première école ?","¿Cómo se llamaba tu primera escuela?","İlk okulunuzun adı neydi?","نام اولین مدرسه‌ای که در آن درس خواندید چیست؟"],
+["ما اسم مدينة ميلادك؟","What is your birth city?","Quelle est votre ville de naissance ?","¿Cuál es tu ciudad de nacimiento?","Doğduğunuz şehir neresi?","شهر محل تولد شما کجاست؟"],
+["ما اسم أقرب أصدقاء طفولتك؟","Who was your closest childhood friend?","Qui était votre meilleur ami d’enfance ?","¿Quién fue tu mejor amigo de la infancia?","En yakın çocukluk arkadaşınızın adı neydi?","نزدیک‌ترین دوست دوران کودکی شما چه نام داشت؟"],
+["ما اسم معلمك المفضل؟","Who is your favorite teacher?","Quel est votre enseignant préféré ?","¿Quién es tu profesor favorito?","En sevdiğiniz öğretmenin adı nedir?","معلم مورد علاقه شما کیست؟"],
+["ما هو لقب جدك؟","What is your grandfather’s surname?","Quel est le nom de famille de votre grand-père ?","¿Cuál es el apellido de tu abuelo?","Dedenizin soyadı nedir?","نام خانوادگی پدربزرگ شما چیست؟"],
+["ما اسم أول حيوان أليف امتلكته؟","What was your first pet’s name?","Comment s’appelait votre premier animal de compagnie ?","¿Cómo se llamaba tu primera mascota?","İlk evcil hayvanınızın adı neydi?","نام اولین حیوان خانگی شما چه بود؟"],
+["ما هو طعامك المفضل؟","What is your favorite food?","Quel est votre plat préféré ?","¿Cuál es tu comida favorita?","En sevdiğiniz yemek nedir?","غذای مورد علاقه شما چیست؟"],
+["ما اسم الشارع الذي نشأت فيه؟","What street did you grow up on?","Dans quelle rue avez-vous grandi ?","¿En qué calle creciste?","Hangi sokakta büyüdünüz?","در کدام خیابان بزرگ شدید؟"],
+["ما اسم أول جامعة أو كلية التحقت بها؟","What was the first university or college you attended?","Quelle est la première université ou faculté où vous avez étudié ?","¿Cuál fue la primera universidad o facultad a la que asististe?","Katıldığınız ilk üniversite veya fakülte hangisiydi?","نخستین دانشگاه یا دانشکده‌ای که در آن پذیرفته شدید کدام بود؟"],
+["عند التفعيل يمكنك اختيار جهات اتصال من هاتفك وحفظها في حسابك. لا يُرفع شيء تلقائياً، ولا تُحفظ إلا الجهات التي تختارها أنت.","When enabled, you can pick contacts from your phone and save them in your account. Nothing is uploaded automatically; only the contacts you choose are saved.","Une fois activé, vous pouvez choisir des contacts de votre téléphone et les enregistrer dans votre compte. Rien n’est envoyé automatiquement ; seuls les contacts choisis sont enregistrés.","Al activarlo, puedes elegir contactos de tu teléfono y guardarlos en tu cuenta. No se sube nada automáticamente; solo se guardan los contactos que elijas.","Etkinleştirdiğinizde telefonunuzdan kişi seçip hesabınıza kaydedebilirsiniz. Hiçbir şey otomatik yüklenmez; yalnızca seçtiğiniz kişiler kaydedilir.","با فعال‌سازی می‌توانید مخاطبین گوشی را انتخاب و در حساب خود ذخیره کنید. چیزی خودکار بارگذاری نمی‌شود و فقط مخاطبین انتخابی شما ذخیره می‌شوند."],
+["تفعيل حفظ جهات الاتصال","Turn on saving contacts","Activer l’enregistrement des contacts","Activar guardado de contactos","Kişileri kaydetmeyi aç","فعال‌سازی ذخیره مخاطبین"],
+["إيقاف حفظ جهات الاتصال","Turn off saving contacts","Désactiver l’enregistrement des contacts","Desactivar guardado de contactos","Kişileri kaydetmeyi kapat","غیرفعال‌سازی ذخیره مخاطبین"],
+["اختيار من جهات الاتصال","Pick from contacts","Choisir parmi les contacts","Elegir de los contactos","Kişilerden seç","انتخاب از مخاطبین"],
+
+["لا توجد جهات اتصال محفوظة","No saved contacts","Aucun contact enregistré","No hay contactos guardados","Kayıtlı kişi yok","مخاطب ذخیره‌شده‌ای نیست"],
+["هذه الميزة غير مدعومة على هذا الجهاز، استخدم استيراد ملف جهات الاتصال","This feature is not supported on this device, use the contacts file import","Fonction non prise en charge sur cet appareil, utilisez l’import de fichier de contacts","Esta función no es compatible con este dispositivo, usa la importación de archivo de contactos","Bu özellik bu cihazda desteklenmiyor, kişi dosyası içe aktarmayı kullanın","این قابلیت در این دستگاه پشتیبانی نمی‌شود، از وارد کردن فایل مخاطبین استفاده کنید"],
+["حذف الكل","Delete all","Tout supprimer","Eliminar todo","Tümünü sil","حذف همه"],
+["سيتم حذف جهات الاتصال المحفوظة. متابعة؟","Saved contacts will be deleted. Continue?","Les contacts enregistrés seront supprimés. Continuer ?","Se eliminarán los contactos guardados. ¿Continuar?","Kayıtlı kişiler silinecek. Devam edilsin mi?","مخاطبین ذخیره‌شده حذف می‌شوند. ادامه می‌دهید؟"],
+["حذف جميع جهات الاتصال المحفوظة؟","Delete all saved contacts?","Supprimer tous les contacts enregistrés ?","¿Eliminar todos los contactos guardados?","Tüm kayıtlı kişiler silinsin mi?","همه مخاطبین ذخیره‌شده حذف شوند؟"],
+["✔ تمت الإضافة","✔ Added","✔ Ajouté","✔ Añadido","✔ Eklendi","✔ اضافه شد"],
+["تصدير الطلاب","Export students","Exporter les étudiants","Exportar estudiantes","Öğrencileri dışa aktar","خروجی دانشجویان"],
+["صيغة الملف","File format","Format du fichier","Formato de archivo","Dosya biçimi","قالب فایل"],
+["بياناتي","My data","Mes données","Mis datos","Verilerim","اطلاعات من"],
+["الاسم بالعربية","Name (Arabic)","Nom (arabe)","Nombre (árabe)","Ad (Arapça)","نام (عربی)"],
+["الاسم بالإنجليزية","Name (English)","Nom (anglais)","Nombre (inglés)","Ad (İngilizce)","نام (انگلیسی)"],
+["دولة الهوية","ID country","Pays de la pièce d’identité","País del documento","Kimlik ülkesi","کشور صادرکننده شناسه"],
+["رقم الهاتف","Phone number","Numéro de téléphone","Número de teléfono","Telefon numarası","شماره تلفن"],
+["جهات الاتصال","Contacts","Contacts","Contactos","Kişiler","مخاطبین"],
+["المستند","Document","Document","Documento","Belge","سند"],
+["الجدول","Spreadsheet","Feuille de calcul","Hoja de cálculo","Elektronik tablo","صفحه‌گسترده"],
+["عنوان المستند","Document title","Titre du document","Título del documento","Belge başlığı","عنوان سند"],
+["ملفات الخزنة","Vault files","Fichiers du coffre","Archivos de la bóveda","Kasa dosyaları","فایل‌های گاوصندوق"],
+["تسجيل حساب جديد في المنصة","New account registered on the platform","Nouveau compte créé sur la plateforme","Nueva cuenta registrada en la plataforma","Platformda yeni hesap oluşturuldu","ثبت حساب جدید در پلتفرم"],
+["اكتب رقم واتساب الخاص بك ثم اختر الإرسال:","Enter your WhatsApp number, then choose how to send:","Saisissez votre numéro WhatsApp puis choisissez l’envoi :","Escribe tu número de WhatsApp y elige el envío:","WhatsApp numaranızı yazın ve gönderimi seçin:","شماره واتساپ خود را بنویسید و ارسال را انتخاب کنید:"],
+["إرسال بياناتي إلى رقمي (مع كلمة المرور)","Send my data to my number (with password)","Envoyer mes données à mon numéro (avec mot de passe)","Enviar mis datos a mi número (con contraseña)","Verilerimi numarama gönder (şifreyle)","ارسال اطلاعات من به شماره‌ام (با رمز عبور)"],
+["إرسال بياناتي إلى رقمي","Send my data to my number","Envoyer mes données à mon numéro","Enviar mis datos a mi número","Verilerimi numarama gönder","ارسال اطلاعات من به شماره‌ام"],
+["إرسال بياناتي إلى مالك المنصة","Send my data to the platform owner","Envoyer mes données au propriétaire","Enviar mis datos al propietario","Verilerimi platform sahibine gönder","ارسال اطلاعات من به مالک پلتفرم"],
+["اكتب رقم واتساب صحيح","Enter a valid WhatsApp number","Saisissez un numéro WhatsApp valide","Escribe un número de WhatsApp válido","Geçerli bir WhatsApp numarası yazın","شماره واتساپ معتبر بنویسید"],
+["كلمة المرور","Password","Mot de passe","Contraseña","Şifre","رمز عبور"],
+["احتفظ بهذه الرسالة في مكان آمن","Keep this message in a safe place","Conservez ce message en lieu sûr","Guarda este mensaje en un lugar seguro","Bu mesajı güvenli bir yerde saklayın","این پیام را در جای امنی نگه دارید"],
+["✔ تم تجهيز الملف","✔ File ready","✔ Fichier prêt","✔ Archivo listo","✔ Dosya hazır","✔ فایل آماده است"],
+["تعذر الحفظ","Could not save","Échec de l’enregistrement","No se pudo guardar","Kaydedilemedi","ذخیره نشد"],
+["استيراد ملف جهات الاتصال","Import contacts file","Importer un fichier de contacts","Importar archivo de contactos","Kişi dosyası içe aktar","وارد کردن فایل مخاطبین"],
+["الإعدادات","Settings","Paramètres","Ajustes","Ayarlar","تنظیمات"],
+["للاستفسار","Inquiries","Renseignements","Consultas","Bilgi için","برای پرسش"],
+["اختر الدولة ثم اكتب الرقم بدون الصفر الأول ورمز الدولة.","Choose the country, then type the number without the leading zero or country code.","Choisissez le pays puis saisissez le numéro sans le zéro initial ni l’indicatif.","Elige el país y escribe el número sin el cero inicial ni el prefijo.","Ülkeyi seçin, ardından numarayı baştaki sıfır ve ülke kodu olmadan yazın.","کشور را انتخاب کنید و شماره را بدون صفر اول و کد کشور بنویسید."],
+["الاسم والهوية يُعدَّلان برمز تحقق فقط. باقي البيانات يمكن تعديلها مباشرة.","Name and ID can only be changed with a verification code. Other details can be edited directly.","Le nom et l’identité ne se modifient qu’avec un code de vérification. Les autres données se modifient directement.","El nombre y la identidad solo se cambian con un código de verificación. Los demás datos se editan directamente.","Ad ve kimlik yalnızca doğrulama koduyla değiştirilebilir. Diğer bilgiler doğrudan düzenlenebilir.","نام و شناسه فقط با کد تأیید قابل ویرایش هستند. سایر اطلاعات را می‌توان مستقیم ویرایش کرد."],
+["معلومات حسابي","My account info","Infos de mon compte","Información de mi cuenta","Hesap bilgilerim","اطلاعات حساب من"],
+["الحساب","Account","Compte","Cuenta","Hesap","حساب"],
+["ابدأ المعادلة بـ = مثل: =A1+B1 أو","Start a formula with =, e.g. =A1+B1 or","Commencez une formule par =, p. ex. =A1+B1 ou","Empieza una fórmula con =, p. ej. =A1+B1 o","Formüle = ile başlayın, örn. =A1+B1 veya","فرمول را با = شروع کنید، مثلاً =A1+B1 یا"],
+["عن التطبيق","About the app","À propos de l’application","Acerca de la app","Uygulama hakkında","درباره برنامه"],
+["منصة الطلاب: تسجيل الطلاب، الخزنة الخاصة، الحاسبة العلمية، الوورد، الرسم والإكسل في مكان واحد.","Students Platform: student registration, private vault, scientific calculator, Word, drawing and Excel in one place.","Plateforme étudiante : inscription des étudiants, coffre privé, calculatrice scientifique, Word, dessin et Excel au même endroit.","Plataforma estudiantil: registro de estudiantes, bóveda privada, calculadora científica, Word, dibujo y Excel en un solo lugar.","Öğrenci Platformu: öğrenci kaydı, özel kasa, bilimsel hesap makinesi, Word, çizim ve Excel tek yerde.","پلتفرم دانشجویان: ثبت دانشجو، گاوصندوق خصوصی، ماشین‌حساب علمی، ورد، نقاشی و اکسل در یک مکان."],
+["عن المصمم","About the designer","À propos du concepteur","Acerca del diseñador","Tasarımcı hakkında","درباره طراح"],
+["الأمين أسامة بابكر الأمين","Alamin Osama Babker Alamin","Alamin Osama Babker Alamin","Alamin Osama Babker Alamin","Alamin Osama Babker Alamin","الأمين أسامة بابكر الأمين"],
+["بحث بالاسم أو الكلية أو الرقم","Search by name, college or ID","Rechercher par nom, faculté ou numéro","Buscar por nombre, facultad o número","Ad, fakülte veya numaraya göre ara","جستجو بر اساس نام، دانشکده یا شماره"],
+["برمز","with code","avec code","con código","kodla","با کد"],["تعديل","Edit","Modifier","Editar","Düzenle","ویرایش"],
+["كلمة","words","mots","palabras","kelime","کلمه"],["حرف","chars","car.","caract.","karakter","نویسه"],
+["أخرى","Other","Autre","Otro","Diğer","سایر"]
+]);
+R.push(...[
+["⛔ هذا الخيار للمالك فقط","⛔ This option is for the owner only","⛔ Cette option est réservée au propriétaire","⛔ Esta opción es solo para el propietario","⛔ Bu seçenek yalnızca sahibi içindir","⛔ این گزینه فقط برای مالک است"],
+["الدخول لغير المالك ممنوع. لن تظهر أي بيانات قبل إدخال رمز المالك.","Access is forbidden for anyone but the owner. No data is shown before the owner code is entered.","L’accès est interdit à toute personne autre que le propriétaire. Aucune donnée n’apparaît avant la saisie du code propriétaire.","El acceso está prohibido para quien no sea el propietario. No se mostrarán datos antes de introducir el código del propietario.","Sahibi dışındakilerin girişi yasaktır. Sahip kodu girilmeden hiçbir veri gösterilmez.","ورود برای غیر مالک ممنوع است. تا کد مالک وارد نشود هیچ داده‌ای نمایش داده نمی‌شود."],
+["رمز المالك","Owner code","Code propriétaire","Código del propietario","Sahip kodu","کد مالک"],
+["فتح اللوحة","Open panel","Ouvrir le panneau","Abrir panel","Paneli aç","باز کردن پنل"],
+["محاولات كثيرة خاطئة، انتظر دقيقة","Too many wrong attempts, wait a minute","Trop de tentatives erronées, attendez une minute","Demasiados intentos fallidos, espera un minuto","Çok fazla hatalı deneme, bir dakika bekleyin","تلاش‌های ناموفق زیاد است، یک دقیقه صبر کنید"],
+["❌ الرمز خاطئ","❌ Wrong code","❌ Code incorrect","❌ Código incorrecto","❌ Kod yanlış","❌ کد اشتباه است"],
+["البحث عن حساب (رقم الهوية أو الهاتف أو البريد)","Find an account (ID, phone or email)","Rechercher un compte (identité, téléphone ou e-mail)","Buscar una cuenta (identidad, teléfono o correo)","Hesap ara (kimlik, telefon veya e-posta)","جستجوی حساب (شماره ملی، تلفن یا ایمیل)"],
+["بحث","Search","Rechercher","Buscar","Ara","جستجو"],
+["رمز تحقق لطلب","Verification code for a request","Code de vérification pour une demande","Código de verificación para una solicitud","Bir istek için doğrulama kodu","کد تأیید برای یک درخواست"],
+["رقم هاتف الشخص","Person’s phone number","Téléphone de la personne","Teléfono de la persona","Kişinin telefon numarası","شماره تلفن شخص"],
+["رقم الطلب (من رسالة الشخص)","Request number (from the person’s message)","N° de demande (du message de la personne)","N.º de solicitud (del mensaje de la persona)","İstek numarası (kişinin mesajından)","شماره درخواست (از پیام شخص)"],
+["نوع الطلب","Request type","Type de demande","Tipo de solicitud","İstek türü","نوع درخواست"],
+["إنشاء حساب","Create account","Créer un compte","Crear cuenta","Hesap oluştur","ساخت حساب"],
+["استعادة كلمة المرور","Password recovery","Récupération du mot de passe","Recuperar contraseña","Şifre kurtarma","بازیابی رمز عبور"],
+["تعديل بيانات الحساب","Edit account details","Modifier les données du compte","Editar datos de la cuenta","Hesap bilgilerini düzenle","ویرایش اطلاعات حساب"],
+["إظهار رمز التحقق","Show verification code","Afficher le code de vérification","Mostrar código de verificación","Doğrulama kodunu göster","نمایش کد تأیید"],
+["أدخل الهاتف ورقم الطلب (٦ أرقام)","Enter the phone and request number (6 digits)","Saisissez le téléphone et le n° de demande (6 chiffres)","Introduce el teléfono y el n.º de solicitud (6 dígitos)","Telefonu ve istek numarasını girin (6 hane)","تلفن و شماره درخواست را وارد کنید (۶ رقم)"],
+["الدولة","Country","Pays","País","Ülke","کشور"],
+["رقم الهوية","ID number","Numéro d’identité","Número de identidad","Kimlik numarası","شماره شناسه"],
+["الهاتف","Phone","Téléphone","Teléfono","Telefon","تلفن"],
+["البريد","Email","E-mail","Correo","E-posta","ایمیل"],
+["عدد الطلاب المسجلين","Registered students count","Nombre d’étudiants inscrits","Número de estudiantes registrados","Kayıtlı öğrenci sayısı","تعداد دانشجویان ثبت‌شده"],
+["الحالة","Status","Statut","Estado","Durum","وضعیت"],
+["✅ نشط","✅ Active","✅ Actif","✅ Activo","✅ Aktif","✅ فعال"],
+["⏱ معطّل","⏱ Disabled","⏱ Désactivé","⏱ Desactivado","⏱ Devre dışı","⏱ غیرفعال موقت"],
+["🔒 مقفل","🔒 Locked","🔒 Verrouillé","🔒 Bloqueado","🔒 Kilitli","🔒 قفل‌شده"],
+["إلغاء التعطيل","Cancel disabling","Annuler la désactivation","Cancelar desactivación","Devre dışı bırakmayı iptal et","لغو غیرفعال‌سازی"],
+["قفل الحساب","Lock account","Verrouiller le compte","Bloquear cuenta","Hesabı kilitle","قفل حساب"],
+["فتح قفل الحساب","Unlock account","Déverrouiller le compte","Desbloquear cuenta","Hesabın kilidini aç","بازکردن قفل حساب"],
+["تعطيل الحساب لمدة (من ساعة إلى ٧٢ ساعة)","Disable the account for (1 to 72 hours)","Désactiver le compte pendant (1 à 72 heures)","Desactivar la cuenta durante (1 a 72 horas)","Hesabı şu süre devre dışı bırak (1–72 saat)","غیرفعال‌سازی حساب برای (۱ تا ۷۲ ساعت)"],
+["ساعة","hour(s)","heure(s)","hora(s)","saat","ساعت"],
+["بدء التعطيل بالعداد","Start timed disable","Lancer la désactivation avec minuteur","Iniciar desactivación con temporizador","Zamanlayıcıyla devre dışı bırak","شروع غیرفعال‌سازی با شمارنده"],
+["تعيين كلمة مرور جديدة للمستخدم (استرجاع الحساب)","Set a new password for the user (account recovery)","Définir un nouveau mot de passe pour l’utilisateur (récupération)","Establecer una nueva contraseña para el usuario (recuperación)","Kullanıcı için yeni şifre belirle (hesap kurtarma)","تعیین رمز عبور جدید برای کاربر (بازیابی حساب)"],
+["كلمة المرور ٦ أحرف على الأقل","Password must be at least 6 characters","Le mot de passe doit contenir au moins 6 caractères","La contraseña debe tener al menos 6 caracteres","Şifre en az 6 karakter olmalı","رمز عبور حداقل ۶ نویسه باشد"],
+["✔ تم تعيين كلمة المرور","✔ Password set","✔ Mot de passe défini","✔ Contraseña establecida","✔ Şifre belirlendi","✔ رمز عبور تعیین شد"],
+["حذف الحساب نهائياً","Delete account permanently","Supprimer définitivement le compte","Eliminar la cuenta definitivamente","Hesabı kalıcı olarak sil","حذف دائمی حساب"],
+["حذف حساب","Delete the account of","Supprimer le compte de","Eliminar la cuenta de","Şu hesap silinsin:","حذف حساب"],
+["وكل بياناته نهائياً؟","and all its data permanently?","et toutes ses données définitivement ?","y todos sus datos definitivamente?","ve tüm verileri kalıcı olarak mı?","و همه داده‌های آن برای همیشه؟"],
+["تم حذف هذا الحساب","This account was deleted","Ce compte a été supprimé","Esta cuenta fue eliminada","Bu hesap silindi","این حساب حذف شد"]
+]);
+const D=new Map(R.map(r=>[r[0],r.slice(1)])),OR=new WeakMap(),ARX=/[\u0600-\u06FF]/;
+function trs(s){const L=LG.indexOf(document.documentElement.lang);if(L<1)return s;const k=s.trim();
+ let v=D.get(k),kk=k;if(!v){kk=k.replace(/^[^\u0600-\u06FF]+/,'').replace(/[^\u0600-\u06FF]+$/,'');v=D.get(kk)}
+ if(!v)return s;const t=v[L-1]||v[0];return s.replace(kk,t)}
+function tn(n){const p=n.parentElement;if(!p||p.closest('#ed,script,style'))return;const o=OR.get(n),src=o&&n.nodeValue===o.out?o.src:n.nodeValue;
+ if(!o&&!ARX.test(src))return;const out=trs(src);if(out!==n.nodeValue)n.nodeValue=out;OR.set(n,{src,out})}
+function tw(r){const w=document.createTreeWalker(r,4);let n;const a=[];while(n=w.nextNode())a.push(n);a.forEach(tn);
+ (r.querySelectorAll?r.querySelectorAll('[placeholder]'):[]).forEach(e=>{if(e.__p==null)e.__p=e.placeholder;e.placeholder=trs(e.__p)})}
+function trAll(){tw(document.body)}
+new MutationObserver(ms=>ms.forEach(m=>{if(m.type==='characterData')tn(m.target);else m.addedNodes.forEach(x=>x.nodeType===3?tn(x):x.nodeType===1&&tw(x))})).observe(document.body,{childList:true,characterData:true,subtree:true});
+function side(v){$('sb').classList.toggle('hide',!v)}
+function wel(){const s=ls.get('session');if(!s||!me||!$('wl'))return;const a=ls.get('acc',{})[me]||{},ar=['ar','fa'].includes(document.documentElement.lang);
+ const n=ar?(a.ar||a.en||s.p):(a.en||a.ar||s.p);$('wl').textContent=(T.wel[LG.indexOf(document.documentElement.lang)]||T.wel[1])+' '+n+' 👋';$('sbn').textContent=n}
+setLang(ls.get('lang','ar'));
+setTimeout(()=>{$('spl').classList.add('out');setTimeout(()=>$('spl').remove(),600)},1200);
+</script>
+<script>
+/* ===== v2: owner panel, OTP, settings, validation ===== */
+const OH='';
+const h256=async s=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',te.encode(s)))].map(x=>x.toString(16).padStart(2,'0')).join('');
+const pad2=n=>String(n).padStart(2,'0');
+const fmtT=ms=>{ms=Math.max(0,ms);return pad2(Math.floor(ms/3600000))+':'+pad2(Math.floor(ms/60000)%60)+':'+pad2(Math.floor(ms/1000)%60)};
+const curAcc=()=>ls.get('acc',{})[me];
+const DKEYS=['u:','v:','w:','d:','x:','k:'];
+let otk=null,idShow=false,fgOk=false;
+
+/* ---- password eye ---- */
+function eyeify(){document.querySelectorAll('input[type=password]:not([data-eye])').forEach(i=>{i.dataset.eye=1;const w=document.createElement('div');w.className='pwr';i.parentNode.insertBefore(w,i);w.appendChild(i);const b=document.createElement('span');b.className='eye';b.textContent='👁';b.setAttribute('role','button');b.onclick=()=>{const s=i.type==='password';i.type=s?'text':'password';b.textContent=s?'🙈':'👁'};w.appendChild(b)})}
+let eyeT=0;new MutationObserver(()=>{if(eyeT)return;eyeT=setTimeout(()=>{eyeT=0;eyeify()},30)}).observe(document.body,{childList:true,subtree:true});eyeify();
+
+/* ---- overlay ---- */
+function ovl(html,wire){const o=document.createElement('div');o.style.cssText='position:fixed;inset:0;background:#000d;z-index:99;overflow:auto;padding:16px';o.innerHTML='<div class="c" style="max-width:480px;margin:0 auto">'+html+'</div>';document.body.appendChild(o);wire(o,()=>o.remove());return o}
+
+/* ---- countries / phone ---- */
+const DIAL={};'AF93 AL355 DZ213 AS1684 AD376 AO244 AI1264 AG1268 AR54 AM374 AW297 AU61 AT43 AZ994 BS1242 BH973 BD880 BB1246 BY375 BE32 BZ501 BJ229 BM1441 BT975 BO591 BA387 BW267 BR55 IO246 VG1284 BN673 BG359 BF226 BI257 KH855 CM237 CA1 CV238 KY1345 CF236 TD235 CL56 CN86 CO57 KM269 CG242 CD243 CK682 CR506 CI225 HR385 CU53 CW599 CY357 CZ420 DK45 DJ253 DM1767 DO1809 EC593 EG20 SV503 GQ240 ER291 EE372 SZ268 ET251 FK500 FO298 FJ679 FI358 FR33 GF594 PF689 GA241 GM220 GE995 DE49 GH233 GI350 GR30 GL299 GD1473 GP590 GU1671 GT502 GN224 GW245 GY592 HT509 HN504 HK852 HU36 IS354 IN91 ID62 IR98 IQ964 IE353 IL972 IT39 JM1876 JP81 JO962 KZ7 KE254 KI686 XK383 KW965 KG996 LA856 LV371 LB961 LS266 LR231 LY218 LI423 LT370 LU352 MO853 MG261 MW265 MY60 MV960 ML223 MT356 MH692 MQ596 MR222 MU230 MX52 FM691 MD373 MC377 MN976 ME382 MS1664 MA212 MZ258 MM95 NA264 NR674 NP977 NL31 NC687 NZ64 NI505 NE227 NG234 KP850 MK389 NO47 OM968 PK92 PW680 PS970 PA507 PG675 PY595 PE51 PH63 PL48 PT351 PR1787 QA974 RE262 RO40 RU7 RW250 WS685 SM378 ST239 SA966 SN221 RS381 SC248 SL232 SG65 SK421 SI386 SB677 SO252 ZA27 KR82 SS211 ES34 LK94 SD249 SR597 SE46 CH41 SY963 TW886 TJ992 TZ255 TH66 TL670 TG228 TO676 TT1868 TN216 TR90 TM993 TC1649 TV688 UG256 UA380 AE971 GB44 US1 UY598 UZ998 VU678 VA379 VE58 VN84 YE967 ZM260 ZW263'.split(' ').forEach(x=>DIAL[x.slice(0,2)]=x.slice(2));
+const PL={SD:[9,9],EG:[10,10],SA:[9,9],AE:[9,9],QA:[8,8],KW:[8,8],JO:[9,9],LY:[9,9],IQ:[10,10],SY:[9,9],LB:[7,8],PS:[9,9],YE:[9,9],OM:[8,8],BH:[8,8],MA:[9,9],DZ:[9,9],TN:[8,8],MR:[8,8],SO:[7,9],DJ:[8,8],KM:[7,7],US:[10,10],CA:[10,10],GB:[10,10],TR:[10,10],IN:[10,10],FR:[9,9],DE:[10,11],IT:[9,10],ES:[9,9],PK:[10,10],BD:[10,10],NG:[10,10],ET:[9,9],KE:[9,9],ID:[9,12]};
+const PF={SD:/^[19]/,EG:/^1/,SA:/^5/,AE:/^5/,QA:/^[3567]/,KW:/^[569]/,JO:/^7/,LY:/^9/,IQ:/^7/,OM:/^[79]/,BH:/^[36]/,MA:/^[67]/,DZ:/^[567]/,TN:/^[2459]/,SY:/^9/,PS:/^5/,YE:/^7/};
+let PCOPT='';try{const dn=new Intl.DisplayNames(['ar'],{type:'region'}),fl=c=>String.fromCodePoint(...[...c].map(x=>127397+x.charCodeAt(0)));
+ PCOPT=Object.keys(DIAL).map(c=>{let n=c;try{n=dn.of(c)||c}catch(e){}return[c,n]}).sort((a,b)=>a[1].localeCompare(b[1],'ar')).map(([c,n])=>'<option value="'+c+'"'+(c==='SD'?' selected':'')+'>'+fl(c)+' '+n+' (+'+DIAL[c]+')</option>').join('')}catch(e){PCOPT=Object.keys(DIAL).map(c=>'<option value="'+c+'">'+c+' (+'+DIAL[c]+')</option>').join('')}
+function phoneFull(iso,raw){let n=dg(String(raw||'')).replace(/[\s\-().]/g,'');if(!n)return{err:'أدخل رقم الهاتف'};if(/\D/.test(n))return{err:'رقم الهاتف يجب أن يحتوي على أرقام فقط'};
+ const D=DIAL[iso],R=PL[iso]||[6,12];n=n.replace(/^0+/,'');if(n.startsWith(D)&&n.length>R[1])n=n.slice(D.length);
+ if(n.length<R[0]||n.length>R[1]||n.length+D.length>15)return{err:'رقم الهاتف غير صحيح لهذه الدولة (+'+D+'): المطلوب '+(R[0]===R[1]?R[0]:R[0]+'–'+R[1])+' أرقام بدون الصفر الأول'};
+ if(PF[iso]&&!PF[iso].test(n))return{err:'رقم الهاتف لا يبدأ بصيغة صحيحة لهذه الدولة'};
+ if(/^(\d)\1+$/.test(n)||'0123456789'.includes(n)||'9876543210'.includes(n)||/^(\d\d)\1{2,}$/.test(n))return{err:'رقم الهاتف غير حقيقي'};
+ return{p:'+'+D+n}}
+function phIn(el){el.value=dg(el.value).replace(/\D/g,'').slice(0,15)}
+
+/* ---- fake e-mail ---- */
+const DISP=new Set('mailinator.com guerrillamail.com guerrillamail.net sharklasers.com 10minutemail.com tempmail.com temp-mail.org temp-mail.io tempmail.net yopmail.com yopmail.fr trashmail.com throwawaymail.com getnada.com nada.email maildrop.cc dispostable.com fakeinbox.com mailnesia.com mintemail.com mytemp.email emailondeck.com moakt.com tempr.email discard.email spamgourmet.com mohmal.com tmpmail.org tmpmail.net burnermail.io harakirimail.com mailcatch.com inboxkitten.com tempinbox.com 1secmail.com 1secmail.net 1secmail.org dropmail.me fakemail.net emailfake.com crazymailing.com fexpost.com byom.de example.com example.org example.net test.com invalid.com mail.com.invalid'.split(' '));
+const TYPO={'gmial.com':'gmail.com','gmai.com':'gmail.com','gamil.com':'gmail.com','gmail.co':'gmail.com','gmail.con':'gmail.com','gnail.com':'gmail.com','hotmial.com':'hotmail.com','hotmail.con':'hotmail.com','hotmai.com':'hotmail.com','yaho.com':'yahoo.com','yahoo.con':'yahoo.com','outlok.com':'outlook.com','outlook.con':'outlook.com'};
+function fakeEmail(e){const[l,d]=e.toLowerCase().split('@');
+ if(DISP.has(d)||/(^|[.-])(temp|trash|throw|fake|disposable|spam|burner|10min|guerrilla|mailinator|yopmail)/.test(d))return'لا يُقبل بريد وهمي أو مؤقت. استخدم بريدك الحقيقي';
+ if(/^(test|tester|fake|asdf|asdfg|qwer|qwerty|abc|abcd|xyz|xxx|none|noemail|example|user|admin|email|mail|me|no|aaa|aa|a|123|1234|12345|123456)$/.test(l)||/^(.)\1{3,}$/.test(l)||/^\d{1,6}$/.test(l)||l.replace(/[^a-z]/g,'').length<2&&!/[a-z]{2}/.test(l))return'اسم البريد غير حقيقي، اكتب بريدك الفعلي';
+ if(TYPO[d])return'هل تقصد '+l+'@'+TYPO[d]+'؟ تأكد من كتابة النطاق';
+ return''}
+
+/* ---- national IDs (Arab countries + other) ---- */
+const isDt=(y,m,d)=>{const x=new Date(Date.UTC(y,m-1,d));return x.getUTCFullYear()===y&&x.getUTCMonth()===m-1&&x.getUTCDate()===d&&x<=new Date()};
+const luhnOk=s=>[...s].reverse().reduce((t,c,i)=>{let n=+c;if(i%2){n*=2;if(n>9)n-=9}return t+n},0)%10===0;
+const NID2={SD:[/^\d{11}$/,'11 رقماً'],
+ EG:[/^[23]\d{13}$/,'14 رقماً تبدأ بـ 2 أو 3',s=>{const g=+s.slice(7,9);return isDt((s[0]==='2'?1900:2000)+ +s.slice(1,3),+s.slice(3,5),+s.slice(5,7))&&(g>=1&&g<=35||g===88)}],
+ SA:[/^[12]\d{9}$/,'10 أرقام تبدأ بـ 1 (مواطن) أو 2 (مقيم)',luhnOk],
+ AE:[/^784(19|20)\d{2}\d{7}\d$/,'15 رقماً تبدأ بـ 784 ثم سنة الميلاد',luhnOk],
+ QA:[/^[23]\d{10}$/,'11 رقماً تبدأ بـ 2 أو 3'],
+ KW:[/^[123]\d{11}$/,'12 رقماً تبدأ بـ 1 أو 2 أو 3',s=>isDt(1700+100*+s[0]+ +s.slice(1,3),+s.slice(3,5),+s.slice(5,7))],
+ JO:[/^\d{10}$/,'10 أرقام'],LY:[/^[12]\d{11}$/,'12 رقماً تبدأ بـ 1 أو 2'],IQ:[/^\d{12}$/,'12 رقماً'],SY:[/^\d{11}$/,'11 رقماً'],
+ LB:[/^\d{7,8}$/,'7 أو 8 أرقام'],PS:[/^\d{9}$/,'9 أرقام',luhnOk],YE:[/^\d{8,11}$/,'من 8 إلى 11 رقماً'],OM:[/^\d{7,8}$/,'7 أو 8 أرقام'],
+ BH:[/^\d{2}(0[1-9]|1[0-2])\d{5}$/,'9 أرقام (CPR)'],MA:[/^[A-Z]{1,2}\d{5,6}$/,'حرف أو حرفان ثم 5–6 أرقام'],DZ:[/^\d{18}$/,'18 رقماً'],TN:[/^\d{8}$/,'8 أرقام'],MR:[/^\d{10}$/,'10 أرقام'],
+ SO:[/^(?=.*\d)[A-Z0-9]{6,15}$/,'6–15 حرفاً/رقماً'],DJ:[/^(?=.*\d)[A-Z0-9]{6,15}$/,'6–15 حرفاً/رقماً'],KM:[/^(?=.*\d)[A-Z0-9]{6,15}$/,'6–15 حرفاً/رقماً'],
+ OT:[/^(?=.*\d)[A-Z0-9]{5,20}$/,'5–20 حرفاً/رقماً']};
+const NCL=[['SD','السودان','Sudan'],['EG','مصر','Egypt'],['SA','السعودية','Saudi Arabia'],['AE','الإمارات','UAE'],['QA','قطر','Qatar'],['KW','الكويت','Kuwait'],['JO','الأردن','Jordan'],['LY','ليبيا','Libya'],['IQ','العراق','Iraq'],['SY','سوريا','Syria'],['LB','لبنان','Lebanon'],['PS','فلسطين','Palestine'],['YE','اليمن','Yemen'],['OM','عُمان','Oman'],['BH','البحرين','Bahrain'],['MA','المغرب','Morocco'],['DZ','الجزائر','Algeria'],['TN','تونس','Tunisia'],['MR','موريتانيا','Mauritania'],['SO','الصومال','Somalia'],['DJ','جيبوتي','Djibouti'],['KM','جزر القمر','Comoros'],['OT','أخرى','Other']];
+const NCOPT=NCL.map(([c,a,e])=>'<option value="'+c+'">'+a+' / '+e+'</option>').join('');
+function idErr2(nc,n){const R=NID2[nc];if(!R)return'اختر الدولة';if(!R[0].test(n))return'رقم الهوية غير صحيح لهذه الدولة، المطلوب: '+R[1];
+ if(/^(\d)\1+$/.test(n)||/^\d+$/.test(n)&&('0123456789'.includes(n)||'9876543210'.includes(n)))return'رقم الهوية غير حقيقي';
+ if(R[2]&&!R[2](n))return'رقم الهوية غير صالح (فشل التحقق من الصيغة أو تاريخ الميلاد أو رقم التحقق)';return''}
+sgnExtra=function(){const ar=$('arn').value.trim().replace(/\s+/g,' '),en=$('enn').value.trim().replace(/\s+/g,' '),nc=$('nc').value,nid=dg($('nid').value).replace(/[\s-]/g,'').toUpperCase(),sx=$('sx').value;
+ if(!/^[\u0600-\u06FF]+( [\u0600-\u06FF]+){3,}$/.test(ar)){msg('m1','اكتب الاسم الرباعي بالعربية فقط (٤ أسماء على الأقل)');return null}
+ if(!/^[A-Za-z'\-]+( [A-Za-z'\-]+){3,}$/.test(en)){msg('m1','اكتب الاسم الرباعي بالإنجليزية فقط (٤ أسماء على الأقل)');return null}
+ const e=idErr2(nc,nid);if(e){msg('m1',e);return null}
+ if(Object.values(ls.get('acc',{})).some(a=>a.nid===nid)){msg('m1','رقم الهوية مسجل بحساب آخر');return null}
+ if(!sx){msg('m1','اختر الجنس');return null}
+ return{ar,en,nc,nid,sx}};
+
+$('nc').onchange=()=>{if(DIAL[$('nc').value])$('pc').value=$('nc').value};
+
+/* ---- OTP (different code on every request) ---- */
+const newRef=()=>String(100000+crypto.getRandomValues(new Uint32Array(1))[0]%900000);
+async function otpFor(p,pu,ref){const h=await crypto.subtle.digest('SHA-256',te.encode(OKEY+':'+key9(p)+':'+pu+':'+ref));return String(new DataView(h).getUint32(0)%100000).padStart(5,'0')}
+function otpUI(el,o){let ref=newRef(),bad=0,busy=0;const PN={up:'إنشاء حساب',fg:'استعادة كلمة المرور',ed:'تعديل بيانات الحساب'}[o.purpose];
+ el.innerHTML='<h2 style="text-align:center">🔐 رمز التحقق</h2><small>اطلب الرمز من مالك المنصة عبر واتساب ثم اكتبه في الخانات. كل طلب يعطي رمزاً جديداً مختلفاً.</small><div class="code rf" style="font-size:15px;letter-spacing:1px"></div><button class="wa" style="background:#25D366;color:#fff">طلب الرمز من المالك (واتساب)</button><div class="otp"></div><div class="om m"></div><button class="s nw">🔄 طلب رمز جديد</button>'+(o.onBack?'<button class="s bk">← رجوع</button>':'');
+ const box=el.querySelector('.otp'),om=el.querySelector('.om'),rf=el.querySelector('.rf'),q=s=>el.querySelector(s);
+ const showRef=()=>rf.textContent='رقم الطلب: '+ref;showRef();
+ q('.wa').onclick=()=>openWa('249997268842','أرغب بـ'+PN+'\nرقمي: '+o.p+'\nرقم الطلب: '+ref+'\nأرجو إرسال رمز التحقق');
+ box.innerHTML=Array.from({length:5},(_,i)=>'<input inputmode="numeric" maxlength="1" autocomplete="'+(i?'off':'one-time-code')+'" aria-label="'+(i+1)+'">').join('');
+ const I=[...box.children],val=()=>I.map(x=>x.value).join('');
+ function clr(){box.className='otp';I.forEach(x=>{x.value='';x.disabled=false});I[0].focus()}
+ q('.nw').onclick=()=>{ref=newRef();bad=0;showRef();clr();om.textContent='رمز جديد: الرمز السابق لم يعد صالحاً، اطلب الرمز من جديد.';om.className='om m ok'};
+ if(o.onBack)q('.bk').onclick=o.onBack;
+ async function chk(){if(busy)return;busy=1;const ok=val()===await otpFor(o.p,o.purpose,ref);
+  if(ok){box.className='otp ok';I.forEach(x=>x.disabled=true);om.textContent='✔ تم التحقق بنجاح';om.className='om m ok';setTimeout(o.onOk,700)}
+  else{bad++;box.className='otp bad';om.className='om m er';om.textContent=bad>=5?'❌ فشل التحقق: تجاوزت المحاولات، اطلب رمزاً جديداً':'❌ رمز خاطئ — فشل التحقق';if(bad>=5){ref=newRef();bad=0;showRef()}setTimeout(()=>{if(box.classList.contains('bad'))clr()},900)}
+  busy=0}
+ I.forEach((x,i)=>{x.oninput=()=>{x.value=dg(x.value).replace(/\D/g,'').slice(-1);box.className='otp';om.textContent='';if(x.value&&i<4)I[i+1].focus();if(val().length===5)chk()};
+  x.onkeydown=e=>{if(e.key==='Backspace'&&!x.value&&i>0){I[i-1].focus();I[i-1].value=''}};
+  x.onpaste=e=>{const t=dg((e.clipboardData||window.clipboardData).getData('text')).replace(/\D/g,'').slice(0,5);if(!t)return;e.preventDefault();[...t].forEach((c,j)=>I[j].value=c);I[Math.min(t.length,4)].focus();if(t.length===5)chk()}});
+ I[0].focus()}
+
+/* ---- signup flow ---- */
+const upShow=()=>[...$('upw').children].forEach(c=>c.classList.toggle('hide',c.id==='codebox'));
+const _sm=setMode;setMode=function(m){_sm(m);pend=null;upShow()};
+sendCode=async function(){const pr=phoneFull($('pc').value,$('ph').value);if(pr.err){msg('m1',pr.err);return}
+ const em=$('em').value.trim().toLowerCase(),ee=emailErr(em)||fakeEmail(em);if(ee){msg('m1',ee);return}
+ const pw=$('pw').value;if(pw.length<6){msg('m1','كلمة المرور قصيرة (٦ أحرف على الأقل)');return}if(pw.length>128){msg('m1','كلمة المرور أطول من المسموح (١٢٨ حرفاً)');return}
+ const A=ls.get('acc',{}),p=pr.p;
+ if(A[key9(p)]){msg('m1','هذا الرقم مسجل بحساب بالفعل، استخدم تسجيل الدخول');return}
+ if(Object.values(A).some(a=>a.e&&a.e.toLowerCase()===em)){msg('m1','هذا البريد مرتبط بحساب آخر');return}
+ const X=sgnExtra();if(!X)return;pend={p,e:em,pw,...X};msg('m1','');
+ [...$('upw').children].forEach(c=>c.classList.toggle('hide',c.id!=='codebox'));
+ otpUI($('codebox'),{p,purpose:'up',onBack:()=>{pend=null;upShow()},onOk:finishUp})};
+async function finishUp(){const q=pend;if(!q)return;const A=ls.get('acc',{}),a={p:q.p,e:q.e,ar:q.ar,en:q.en,nc:q.nc,nid:q.nid,sx:q.sx,...await newHash(q.pw)};A[key9(a.p)]=a;ls.set('acc',A);pend=null;['pw','ph','em'].forEach(i=>$(i).value='');upShow();start(a);sendOwner(acctMsg(a),a.p,q.pw)}
+
+/* ---- forgot password ---- */
+checkFg=async function(){fgAcc=null;fgOk=false;$('fgn').classList.add('hide');$('fgp').classList.add('hide');const v=dg($('fid').value).trim();
+ if(!v){msg('m1','أدخل رقم الهوية الوطنية أو البريد الإلكتروني');return}
+ const A=Object.values(ls.get('acc',{})),n=v.replace(/[\s-]/g,'').toUpperCase(),a=v.includes('@')?A.find(x=>x.e&&x.e.toLowerCase()===v.toLowerCase()):A.find(x=>x.nid&&x.nid===n);
+ if(!a){msg('m1','لا يوجد حساب بهذه البيانات');return}
+ fgAcc=a;$('fgn').classList.remove('hide');msg('m1','');
+ otpUI($('fgo'),{p:a.p,purpose:'fg',onOk:()=>{fgOk=true;$('fgp').classList.remove('hide');msg('m1','✔ تم التحقق، اكتب كلمة المرور الجديدة',1)}})};
+resetPw=async function(){if(!fgAcc||!fgOk)return;const pw=$('fpw').value;
+ if(pw.length<6){msg('m1','كلمة المرور قصيرة (٦ أحرف على الأقل)');return}if(pw.length>128){msg('m1','كلمة المرور أطول من المسموح (١٢٨ حرفاً)');return}
+ const A=ls.get('acc',{}),a=A[key9(fgAcc.p)];Object.assign(a,await newHash(pw));ls.set('acc',A);fgAcc=null;fgOk=false;['fpw','fid'].forEach(i=>$(i).value='');setMode('in');msg('m1','✔ تم تغيير كلمة المرور، سجّل الدخول',1)};
+
+/* ---- account status (lock / timed disable) ---- */
+function stMsg(a){if(a.lk)return'🔒 تم قفل هذا الحساب من قبل المالك. تواصل مع المالك لفتحه.';if(a.dis&&a.dis>Date.now())return'⏱ الحساب معطّل مؤقتاً من قبل المالك. المدة المتبقية: '+fmtT(a.dis-Date.now());return''}
+setInterval(()=>{const s=ls.get('session');if(!s||!me)return;const a=ls.get('acc',{})[me],m=!a?'تم حذف هذا الحساب':stMsg(a);if(m){logout();msg('m1',m)}},4000);
+
+/* ---- owner panel ---- */
+function ownerPanel(){ovl('<div class="shield"><svg viewBox="0 0 64 72" width="92" height="104"><path d="M32 3 6 13v22c0 18 11 29 26 34 15-5 26-16 26-34V13z" fill="#3b0d0d" stroke="#ff4d4d" stroke-width="3"/><path d="M32 22v20M32 49v3" stroke="#ff4d4d" stroke-width="5" stroke-linecap="round"/></svg></div><div class="red">⛔ هذا الخيار للمالك فقط</div><p style="text-align:center;margin:4px 0"><small>الدخول لغير المالك ممنوع. لن تظهر أي بيانات قبل إدخال رمز المالك.</small></p><label>رمز المالك</label><input id="ok" type="password" inputmode="numeric" autocomplete="off"><div id="om" class="m er"></div><button id="y">فتح اللوحة</button><button class="s" id="n">إغلاق</button>',(o,close)=>{
+ const stop=()=>{clearInterval(otk);close()};o.querySelector('#n').onclick=stop;
+ o.querySelector('#y').onclick=async()=>{const m=o.querySelector('#om'),L=ls.get('olock',{n:0,t:0});
+  if(Date.now()<L.t){m.textContent='محاولات كثيرة خاطئة، انتظر دقيقة';return}
+  if(await h256('OWN:'+dg(o.querySelector('#ok').value).replace(/\D/g,''))!==OH){L.n=(L.n||0)+1;if(L.n>=5){L.t=Date.now()+60000;L.n=0}ls.set('olock',L);m.textContent='❌ الرمز خاطئ';return}
+  ls.del('olock');ownerMain(o,stop)}})}
+function ownerMain(o,stop){const c=o.firstChild,q=s=>c.querySelector(s);
+ c.innerHTML='<h2>🛡️ لوحة المالك</h2><label>البحث عن حساب (رقم الهوية أو الهاتف أو البريد)</label><input id="oq" dir="ltr" autocomplete="off"><button id="os">🔍 بحث</button><div id="oa"></div><hr style="border-color:#2b3a5e;margin:14px 0"><h2>🔑 رمز تحقق لطلب</h2><label>رقم هاتف الشخص</label><input id="gp" type="tel" dir="ltr"><label>رقم الطلب (من رسالة الشخص)</label><input id="gr" inputmode="numeric" dir="ltr" maxlength="6"><label>نوع الطلب</label><select id="gt"><option value="up">إنشاء حساب</option><option value="fg">استعادة كلمة المرور</option><option value="ed">تعديل بيانات الحساب</option></select><div id="gc" class="code" style="min-height:30px"></div><button id="gb">إظهار رمز التحقق</button><button class="s" id="oz">إغلاق</button>';
+ q('#oz').onclick=stop;
+ q('#gb').onclick=async()=>{const r=dg(q('#gr').value).trim();if(key9(q('#gp').value).length<7||!/^\d{6}$/.test(r)){q('#gc').textContent='أدخل الهاتف ورقم الطلب (٦ أرقام)';return}q('#gc').textContent=await otpFor(dg(q('#gp').value),q('#gt').value,r)};
+ q('#os').onclick=()=>{const v=dg(q('#oq').value).trim(),A=ls.get('acc',{});let a=null;
+  if(v.includes('@'))a=Object.values(A).find(x=>x.e&&x.e.toLowerCase()===v.toLowerCase());
+  else{const n=v.replace(/[\s-]/g,'').toUpperCase(),k=key9(v);a=Object.values(A).find(x=>x.nid===n)||(k.length>=7?A[k]:null)}
+  showAcc(q('#oa'),a)}}
+function showAcc(box,a){clearInterval(otk);if(!a){box.innerHTML='<div class="m er">لا يوجد حساب بهذه البيانات</div>';return}
+ const k=key9(a.p),n=(ls.get('u:'+k,{}).students||[]).length,dis=a.dis&&a.dis>Date.now();
+ const R=(l,v)=>'<div class="ir"><div style="min-width:0"><small>'+l+'</small><br><b dir="auto" style="overflow-wrap:anywhere">'+esc(v||'-')+'</b></div></div>';
+ box.innerHTML='<div style="margin-top:10px">'+R('الاسم بالعربية',a.ar)+R('Name (English)',a.en)+R('الدولة',a.nc)+R('رقم الهوية',a.nid)+R('الهاتف',a.p)+R('البريد',a.e)+R('الجنس',a.sx==='M'?'ذكر':a.sx==='F'?'أنثى':'')+R('عدد الطلاب المسجلين',String(n))+R('الحالة',a.lk?'🔒 مقفل':dis?'⏱ معطّل':'✅ نشط')+'</div>'
+ +(dis?'<div id="oc" class="code"></div><button class="s" id="ou">إلغاء التعطيل</button>':'')
+ +'<button id="ol" class="'+(a.lk?'':'d')+'">'+(a.lk?'🔓 فتح قفل الحساب':'🔒 قفل الحساب')+'</button>'
+ +'<label>تعطيل الحساب لمدة (من ساعة إلى ٧٢ ساعة)</label><div style="display:grid;grid-template-columns:52px 1fr 52px;gap:8px;align-items:center"><button class="s" id="hm" style="margin:0">−</button><div id="hv" class="code" style="margin:0">1 '+trs('ساعة')+'</div><button class="s" id="hp" style="margin:0">+</button></div><input id="hr" type="range" min="1" max="72" value="1" style="padding:0;margin-top:8px"><button id="hd">⏱ بدء التعطيل بالعداد</button>'
+ +'<label>تعيين كلمة مرور جديدة للمستخدم (استرجاع الحساب)</label><input id="np" type="password" autocomplete="new-password"><button class="s" id="on">حفظ كلمة المرور</button><button class="d" id="od">🗑 حذف الحساب نهائياً</button><div id="ox" class="m"></div>';
+ const q=s=>box.querySelector(s),upd=fn=>{const A=ls.get('acc',{}),x=A[k];fn(x);ls.set('acc',A);showAcc(box,x)},sl=q('#hr'),sync=()=>q('#hv').textContent=sl.value+' '+trs('ساعة');
+ sl.oninput=sync;q('#hm').onclick=()=>{sl.value=Math.max(1,+sl.value-1);sync()};q('#hp').onclick=()=>{sl.value=Math.min(72,+sl.value+1);sync()};
+ q('#hd').onclick=()=>upd(x=>{x.dis=Date.now()+sl.value*3600000});q('#ol').onclick=()=>upd(x=>{x.lk=!x.lk});
+ if(dis){const t=()=>{const r=a.dis-Date.now();if(r<=0){clearInterval(otk);showAcc(box,ls.get('acc',{})[k]);return}q('#oc').textContent='⏳ '+fmtT(r)};t();otk=setInterval(t,1000);q('#ou').onclick=()=>upd(x=>{delete x.dis})}
+ q('#on').onclick=async()=>{const p=q('#np').value,x=q('#ox');if(p.length<6){x.textContent='كلمة المرور ٦ أحرف على الأقل';x.className='m er';return}const A=ls.get('acc',{});Object.assign(A[k],await newHash(p));ls.set('acc',A);q('#np').value='';x.textContent='✔ تم تعيين كلمة المرور';x.className='m ok'};
+ q('#od').onclick=async()=>{if(!await ask(trs('حذف حساب')+' '+(a.ar||a.p)+' '+trs('وكل بياناته نهائياً؟')))return;const A=ls.get('acc',{});delete A[k];ls.set('acc',A);DKEYS.forEach(x=>ls.del(x+k));box.innerHTML='<div class="m ok">✔ تم حذف الحساب</div>'}}
+
+/* ---- settings ---- */
+const _g2=go;go=function(s){_g2(s);if(s==='set')renderSet()};
+const upA=fn=>{const A=ls.get('acc',{});fn(A[me],A);ls.set('acc',A)};
+function renderSet(){const a=curAcc();if(!a)return;const cn=NCN(a.nc),mk=s=>s?(idShow?s:'•'.repeat(Math.max(0,s.length-3))+s.slice(-3)):'-';
+ const R=(l,v,b)=>'<div class="ir"><div style="min-width:0"><small>'+l+'</small><br><b dir="auto" style="overflow-wrap:anywhere">'+v+'</b></div><div style="display:flex;gap:6px">'+(b||'')+'</div></div>';
+ const B=(k,t)=>'<button class="s" onclick="ed(\''+k+'\')">'+(t||'✏️ تعديل')+'</button>';
+ $('sinfo').innerHTML=R('الاسم بالعربية',esc(a.ar||'-'),B('ar','✏️ برمز'))+R('Name (English)',esc(a.en||'-'),B('en','✏️ برمز'))
+  +R('الدولة / رقم الهوية',esc(cn)+' · <span dir="ltr">'+esc(mk(a.nid))+'</span>','<button class="s" onclick="idShow=!idShow;renderSet()">'+(idShow?'🙈':'👁')+'</button>'+B('nid','✏️ برمز'))
+  +R('رقم الهاتف','<span dir="ltr">'+esc(a.p)+'</span>',B('ph'))+R('البريد الإلكتروني','<span dir="ltr">'+esc(a.e)+'</span>',B('em'))+R('الجنس',a.sx==='M'?'ذكر':a.sx==='F'?'أنثى':'-',B('sx'))}
+function otpGate(p){return new Promise(r=>ovl('<div id="og"></div>',(o,c)=>otpUI(o.querySelector('#og'),{p,purpose:'ed',onBack:()=>{c();r(false)},onOk:()=>{c();r(true)}})))}
+function fdlg(t,h,save,init){return new Promise(r=>ovl('<h2>'+t+'</h2>'+h+'<div class="m er" id="fm"></div><button id="sv">حفظ</button><button class="s" id="cn">إلغاء</button>',(o,c)=>{init&&init(o);
+ o.querySelector('#cn').onclick=()=>{c();r(0)};o.querySelector('#sv').onclick=async()=>{const e=await save(o);if(e){o.querySelector('#fm').textContent=e;return}c();r(1);renderSet();wel()}}))}
+async function ed(k){const a=curAcc();if(!a)return;if(['ar','en','nid'].includes(k)&&!await otpGate(a.p))return;
+ if(k==='ar'||k==='en')return fdlg(k==='ar'?'الاسم بالعربية':'Name (English)','<input id="e1" dir="'+(k==='ar'?'rtl':'ltr')+'" value="'+esc(a[k]||'')+'" maxlength="80">',o=>{const v=o.querySelector('#e1').value.trim().replace(/\s+/g,' ');
+  if(k==='ar'&&!/^[\u0600-\u06FF]+( [\u0600-\u06FF]+){3,}$/.test(v))return'اكتب الاسم الرباعي بالعربية فقط (٤ أسماء على الأقل)';
+  if(k==='en'&&!/^[A-Za-z'\-]+( [A-Za-z'\-]+){3,}$/.test(v))return'اكتب الاسم الرباعي بالإنجليزية فقط (٤ أسماء على الأقل)';
+  upA(x=>{x[k]=v});return''});
+ if(k==='nid')return fdlg('الدولة ورقم الهوية','<label>الدولة</label><select id="e1">'+NCO()+'</select><label>رقم الهوية</label><input id="e2" dir="ltr" autocomplete="off" maxlength="24">',o=>{const nc=o.querySelector('#e1').value,n=dg(o.querySelector('#e2').value).replace(/[\s-]/g,'').toUpperCase(),e=idErr2(nc,n);if(e)return e;
+  if(Object.values(ls.get('acc',{})).some(x=>x.nid===n&&key9(x.p)!==me))return'رقم الهوية مسجل بحساب آخر';upA(x=>{x.nc=nc;x.nid=n});return''},o=>{o.querySelector('#e1').value=a.nc||'SD'});
+ if(k==='ph')return fdlg('رقم الهاتف','<label>الدولة</label><select id="e1">'+PCO()+'</select><label>الرقم</label><input id="e2" type="tel" inputmode="numeric" dir="ltr" maxlength="15" oninput="phIn(this)">',o=>{const r=phoneFull(o.querySelector('#e1').value,o.querySelector('#e2').value);if(r.err)return r.err;
+  const A=ls.get('acc',{}),nk=key9(r.p),x=A[me];if(nk!==me){if(A[nk])return'هذا الرقم مسجل بحساب آخر';DKEYS.forEach(d=>{try{const v=localStorage.getItem(d+me);if(v!==null){localStorage.setItem(d+nk,v);localStorage.removeItem(d+me)}}catch(e){}});A[nk]=x;delete A[me];me=nk}
+  x.p=r.p;ls.set('acc',A);ls.set('session',{p:r.p,e:x.e});return''});
+ if(k==='em')return fdlg('البريد الإلكتروني','<input id="e1" type="email" dir="ltr" autocomplete="off" value="'+esc(a.e||'')+'">',o=>{const v=o.querySelector('#e1').value.trim().toLowerCase(),e=emailErr(v)||fakeEmail(v);if(e)return e;
+  if(Object.values(ls.get('acc',{})).some(x=>x.e&&x.e.toLowerCase()===v&&key9(x.p)!==me))return'هذا البريد مرتبط بحساب آخر';upA(x=>{x.e=v});ls.set('session',{p:curAcc().p,e:v});return''});
+ if(k==='sx')return fdlg('الجنس','<select id="e1"><option value="M">ذكر</option><option value="F">أنثى</option></select>',o=>{upA(x=>{x.sx=o.querySelector('#e1').value});return''},o=>{o.querySelector('#e1').value=a.sx||'M'})}
+
+/* ===== v3: recovery, privacy & security, exports ===== */
+const RTLL=()=>['ar','fa'].includes(document.documentElement.lang),MK=()=>RTLL()?'\u200F':'\u200E',FM=v=>'\u2068'+v+'\u2069';
+const ln=(l,v)=>MK()+trs(l)+': '+FM(v==null||v===''?'-':v);
+const regN=c=>{try{return new Intl.DisplayNames([document.documentElement.lang||'ar'],{type:'region'}).of(c)||c}catch(e){return c}};
+const NCN=c=>c==='OT'?trs('أخرى'):c?regN(c):'-';
+const NCO=()=>NCL.map(([c])=>'<option value="'+c+'">'+(c==='OT'?trs('أخرى'):regN(c))+'</option>').join('');
+const PCO=()=>{const fl=c=>String.fromCodePoint(...[...c].map(x=>127397+x.charCodeAt(0)));return Object.keys(DIAL).map(c=>[c,regN(c)]).sort((x,y)=>x[1].localeCompare(y[1],document.documentElement.lang)).map(([c,n])=>'<option value="'+c+'"'+(c==='SD'?' selected':'')+'>'+fl(c)+' '+n+' (+'+DIAL[c]+')</option>').join('')};
+function fillC(){const a=$('nc').value||'SD',b=$('pc').value||'SD';$('nc').innerHTML=NCO();$('pc').innerHTML=PCO();$('nc').value=a;$('pc').value=b}
+const _sl=setLang;setLang=function(l){_sl(l);fillC();try{if($('word')&&!$('word').classList.contains('hide'))wCount();if(me&&!$('set').classList.contains('hide'))renderSet()}catch(e){}};
+fillC();
+const nz=s=>dg(s).trim().toLowerCase().replace(/[\u064B-\u0652\u0640]/g,'').replace(/[أإآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/\s+/g,' ');
+const SQS=['ما اسم أول مدرسة درست فيها؟','ما اسم مدينة ميلادك؟','ما اسم أقرب أصدقاء طفولتك؟','ما اسم معلمك المفضل؟','ما هو لقب جدك؟','ما اسم أول حيوان أليف امتلكته؟','ما هو طعامك المفضل؟','ما اسم الشارع الذي نشأت فيه؟','ما اسم أول جامعة أو كلية التحقت بها؟'];
+const proofPw=async(a,p)=>!!p&&!!a.h&&await hashPw(p,a.s)===a.h;
+const fgLocked=()=>Date.now()<ls.get('lock',{n:0,t:0}).t;
+function fgFail(){const L=ls.get('lock',{n:0,t:0});L.n=(L.n||0)+1;if(L.n>=5){L.t=Date.now()+60000;L.n=0}ls.set('lock',L)}
+const acctMsg=a=>[trs('تسجيل حساب جديد في المنصة'),ln('الاسم بالعربية',a.ar),ln('الاسم بالإنجليزية',a.en),ln('دولة الهوية',NCN(a.nc)),ln('رقم الهوية الوطنية',a.nid),ln('رقم الهاتف',a.p),ln('البريد الإلكتروني',a.e),ln('الجنس',trs(a.sx==='M'?'ذكر':'أنثى'))].join('\n');
+
+/* ---- forgot password (Facebook-style) ---- */
+let fgBy='';
+checkFg=async function(){fgAcc=null;fgOk=false;$('fgn').classList.add('hide');$('fgp').classList.add('hide');const v=dg($('fid').value).trim();
+ if(!v){msg('m1','أدخل رقم الهاتف أو البريد الإلكتروني أو رقم الهوية الوطنية');return}
+ const M=ls.get('acc',{}),A=Object.values(M);let a,by;
+ if(v.includes('@')){a=A.find(x=>x.e&&x.e.toLowerCase()===v.toLowerCase());by='em'}
+ else{const n=v.replace(/[\s-]/g,'').toUpperCase(),k=key9(v);a=A.find(x=>x.nid===n);by='nid';if(!a&&k.length>=7){a=M[k];by='ph'}}
+ if(!a){msg('m1','لا يوجد حساب بهذه البيانات');return}
+ fgAcc=a;fgBy=by;msg('m1','');$('fgn').classList.remove('hide');fgMenu()};
+function fgDone(){fgOk=true;$('fgo').innerHTML='';$('fgp').classList.remove('hide');msg('m1','✔ تم التحقق، اكتب كلمة المرور الجديدة',1)}
+function fgMenu(){const a=fgAcc,o=$('fgo'),p=a.p;
+ o.innerHTML='<div class="ir" style="justify-content:flex-start;gap:12px"><div style="font-size:34px">👤</div><div style="min-width:0"><b dir="auto">'+esc((a.ar||a.en||'').split(' ')[0])+'</b><br><small dir="ltr">'+esc(p.slice(0,4)+'•••'+p.slice(-3))+'</small></div></div><h2 style="margin-top:12px">كيف تريد التحقق من هويتك؟</h2><button id="v1">📱 رمز تحقق عبر واتساب</button><button class="s" id="v2">🔁 التحقق بطريقة أخرى</button>';
+ o.querySelector('#v1').onclick=()=>otpUI(o,{p,purpose:'fg',onBack:fgMenu,onOk:fgDone});o.querySelector('#v2').onclick=fgOther}
+function fgOther(){const a=fgAcc,o=$('fgo'),b=[];
+ if(fgBy!=='em')b.push(['em','✉️ البريد الإلكتروني']);if(fgBy!=='nid')b.push(['nid','🪪 رقم الهوية الوطنية']);if(a.sq)b.push(['sq','❓ أسئلة الأمان']);
+ o.innerHTML='<h2>اختر طريقة أخرى</h2>'+b.map(x=>'<button class="s" data-m="'+x[0]+'">'+x[1]+'</button>').join('')+'<button class="s" id="bk">← رجوع</button>';
+ o.querySelectorAll('[data-m]').forEach(x=>x.onclick=()=>fgAsk(x.dataset.m));o.querySelector('#bk').onclick=fgMenu}
+function fgAsk(m){const a=fgAcc,o=$('fgo');
+ o.innerHTML=(m==='sq'?a.sq.q.map((qi,i)=>'<label>'+SQS[qi]+'</label><input data-a="'+i+'" autocomplete="off">').join(''):'<label>'+(m==='em'?'اكتب بريدك الإلكتروني المسجل':'اكتب رقم هويتك الوطنية')+'</label><input id="fa" dir="ltr" autocomplete="off">')+'<div class="m er" id="fe"></div><button id="fk">تحقق</button><button class="s" id="fb">← رجوع</button>';
+ o.querySelector('#fb').onclick=fgOther;
+ o.querySelector('#fk').onclick=async()=>{const e=o.querySelector('#fe');if(fgLocked()){e.textContent='محاولات كثيرة خاطئة، انتظر دقيقة ثم حاول مجدداً';return}
+  let ok=false;
+  if(m==='sq'){const an=[...o.querySelectorAll('[data-a]')].map(x=>nz(x.value));ok=true;for(let i=0;i<3;i++)if(!an[i]||await hashPw(an[i],a.sq.s)!==a.sq.h[i])ok=false}
+  else{const v=dg(o.querySelector('#fa').value).trim();ok=m==='em'?v.toLowerCase()===(a.e||'').toLowerCase():v.replace(/[\s-]/g,'').toUpperCase()===a.nid}
+  if(ok){ls.del('lock');fgDone()}else{fgFail();e.textContent='البيانات غير مطابقة'}}}
+
+/* ---- privacy & security (settings) ---- */
+const _rs=renderSet;renderSet=function(){_rs();const a=curAcc();if(!a)return;$('sqst').textContent=a.sq?'مفعّل':'غير مفعّل';$('ctst').textContent=a.ct?'مفعّل':'غير مفعّل'};
+function sqOpen(){const a=curAcc(),op=(d)=>SQS.map((q,i)=>'<option value="'+i+'"'+(i===d?' selected':'')+'>'+q+'</option>').join(''),N=['السؤال الأول','السؤال الثاني','السؤال الثالث'];
+ fdlg('🛡️ حماية واسترجاع الحساب','<small>اختر ٣ أسئلة من ٩ واكتب إجاباتك. ستُستخدم لاستعادة حسابك عند نسيان كلمة المرور.</small>'+N.map((n,i)=>'<label>'+n+'</label><select id="q'+i+'">'+op(a.sq?a.sq.q[i]:i)+'</select><input id="a'+i+'" placeholder="الإجابة" autocomplete="off" style="margin-top:6px">').join('')+'<label>كلمة المرور الحالية</label><input id="cp" type="password" autocomplete="off">'+(a.sq?'<button class="d" id="so">إيقاف الحماية</button>':''),
+ async o=>{const q=[0,1,2].map(i=>+o.querySelector('#q'+i).value),an=[0,1,2].map(i=>nz(o.querySelector('#a'+i).value));
+  if(new Set(q).size<3)return'اختر ٣ أسئلة مختلفة';if(an.some(x=>x.length<2))return'اكتب إجابة لكل سؤال (حرفان على الأقل)';
+  if(!await proofPw(a,o.querySelector('#cp').value))return'كلمة المرور خاطئة';
+  const s=b64(crypto.getRandomValues(new Uint8Array(16))),h=[];for(const x of an)h.push(await hashPw(x,s));upA(x=>{x.sq={q,s,h}});return''},
+ o=>{const b=o.querySelector('#so');if(b)b.onclick=async()=>{if(!await proofPw(a,o.querySelector('#cp').value)){o.querySelector('#fm').textContent='كلمة المرور خاطئة';return}upA(x=>{delete x.sq});o.remove();renderSet()}})}
+function ctOpen(){const k=me,get=()=>ls.get('k:'+k,[]),on=()=>!!curAcc().ct;
+ const o=ovl('<h2>👥 حفظ جهات اتصالي</h2><small>عند التفعيل يمكنك اختيار جهات اتصال من هاتفك وحفظها في حسابك. لا يُرفع شيء تلقائياً، ولا تُحفظ إلا الجهات التي تختارها أنت.</small><button id="c1"></button><div id="cb"><button id="cp">📲 اختيار من جهات الاتصال</button><label class="btn" for="cf">📥 استيراد ملف جهات الاتصال</label><input id="cf" type="file" accept=".vcf,text/vcard,text/x-vcard" style="position:absolute;opacity:0;width:1px;height:1px"><div id="cl"></div><div id="cm" class="m"></div></div><button class="s" id="cx">إغلاق</button>',(o,c)=>{o.querySelector('#cx').onclick=c}),q=s=>o.querySelector(s);
+ const draw=()=>{const L=get(),e=on();q('#c1').textContent=e?'إيقاف حفظ جهات الاتصال':'تفعيل حفظ جهات الاتصال';q('#c1').className=e?'d':'';q('#cb').classList.toggle('hide',!e);
+  q('#cl').innerHTML=L.length?L.slice(0,100).map((x,i)=>'<div class="ir"><span style="min-width:0;overflow-wrap:anywhere"><span dir="auto">'+esc(x.n||'-')+'</span> · <span dir="ltr">'+esc(x.p)+'</span></span><button class="d" data-i="'+i+'">حذف</button></div>').join('')+'<button class="d" id="ca">حذف الكل</button>':'<small>لا توجد جهات اتصال محفوظة</small>';
+  q('#cl').querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{const L=get();L.splice(+b.dataset.i,1);ls.set('k:'+k,L);draw()});
+  const ca=q('#ca');if(ca)ca.onclick=async()=>{if(await ask('حذف جميع جهات الاتصال المحفوظة؟')){ls.set('k:'+k,[]);draw()}}};
+ const add=L=>{const C=get(),seen=new Set(C.map(x=>norm(x.p)));for(const x of L){const p=String(x.p||'').trim();if(norm(p).length<5||seen.has(norm(p)))continue;seen.add(norm(p));C.push({n:String(x.n||'').slice(0,80),p:p.slice(0,30)})}
+  if(!ls.set('k:'+k,C.slice(0,3000))){msg('cm','تعذر الحفظ');return}draw();msg('cm','✔ تمت الإضافة',1)};
+ q('#cp').onclick=async()=>{if(!(navigator.contacts&&navigator.contacts.select)){msg('cm','هذه الميزة غير مدعومة على هذا الجهاز، استخدم استيراد ملف جهات الاتصال');return}
+  try{const r=await navigator.contacts.select(['name','tel'],{multiple:true});add(r.flatMap(x=>(x.tel||[]).map(t=>({n:(x.name||[])[0],p:t}))))}catch(e){}};
+ q('#cf').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const L=[];String(r.result).split(/BEGIN:VCARD/i).slice(1).forEach(b=>{const fn=(b.match(/^FN[^:\n]*:(.*)$/mi)||[])[1]||'';[...b.matchAll(/^TEL[^:\n]*:(.*)$/gmi)].forEach(m=>L.push({n:fn.trim(),p:m[1].trim()}))});add(L)};r.readAsText(f);e.target.value=''};
+ q('#c1').onclick=async()=>{if(on()){if(!await ask('سيتم حذف جهات الاتصال المحفوظة. متابعة؟'))return;ls.set('k:'+k,[])}upA(x=>{x.ct=!x.ct});draw();renderSet()};
+ draw()}
+
+/* ---- exports: ZIP or TXT, organised & bidi-safe ---- */
+const stuTxt=st=>st.length?st.map((s,i)=>[MK()+'— '+(i+1)+' —'].concat(F.map(([k,l,op])=>ln(l,op?trs(s[k]||''):s[k]))).join('\r\n')).join('\r\n\r\n'):'-';
+const stuCsv=a=>{const q=v=>{v=String(v==null?'':v);if(/^[=+\-@]/.test(v))v="'"+v;return'"'+v.replace(/"/g,'""')+'"'};return'\ufeff'+[F.map(([k,l])=>q(trs(l))).join(',')].concat(a.map(s=>F.map(([k])=>q(s[k])).join(','))).join('\r\n')};
+async function expStu(){const a=ls.get('u:'+me,{}).students||[];if(!a.length){ask('لا يوجد طلاب لتصديرهم',1);return}
+ if($('ef').value==='zip'&&typeof JSZip!=='undefined'){const z=new JSZip();z.file('students.txt','\ufeff'+stuTxt(a));z.file('students.csv',stuCsv(a));saveTxt('students.zip',await z.generateAsync({type:'blob'}))}
+ else saveTxt('students.txt',new Blob(['\ufeff'+stuTxt(a)],{type:'text/plain;charset=utf-8'}))}
+dlMine=async function(){const n=dg($('dn').value).replace(/[\s-]/g,'').toUpperCase(),pw=$('dp').value;
+ if(fgLocked()){msg('m1','محاولات كثيرة خاطئة، انتظر دقيقة ثم حاول مجدداً');return}
+ const a=n&&Object.values(ls.get('acc',{})).find(x=>x.nid===n);
+ if(!a||!pw||!a.h||await hashPw(pw,a.s)!==a.h){fgFail();msg('m1','البيانات غير مطابقة');return}
+ ls.del('lock');const k=key9(a.p),st=ls.get('u:'+k,{}).students||[],ct=ls.get('k:'+k,[]),w=ls.get('w:'+k,{}),vt=(ls.get('v:'+k,{items:[]}).items||[]).filter(x=>x.u),S0=S,sl=[];
+ try{S=ls.get('x:'+k,{});let mr=0;for(const q in S)mr=Math.max(mr,+q.slice(1));for(let r=1;r<=mr;r++)sl.push([...COLS].map(c=>{const v=String(sv(c+r,{}));return/[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}).join(','))}finally{S=S0}
+ const dv=document.createElement('div');dv.innerHTML=String(w.h||'').replace(/<br\s*\/?>|<\/(div|p|h\d|li|tr)>/gi,'\n');
+ const P=[['account.txt','بياناتي',[ln('الاسم بالعربية',a.ar),ln('الاسم بالإنجليزية',a.en),ln('دولة الهوية',NCN(a.nc)),ln('رقم الهوية الوطنية',a.nid),ln('رقم الهاتف',a.p),ln('البريد الإلكتروني',a.e),ln('الجنس',trs(a.sx==='M'?'ذكر':'أنثى')),ln('حماية واسترجاع الحساب',trs(a.sq?'مفعّل':'غير مفعّل')),ln('حفظ جهات اتصالي',trs(a.ct?'مفعّل':'غير مفعّل'))].join('\r\n')],
+  ['students.txt','الطلاب المسجلون',stuTxt(st)],['contacts.txt','جهات الاتصال',ct.length?ct.map(c=>MK()+FM(c.n||'-')+': '+FM(c.p)).join('\r\n'):'-'],
+  ['document.txt','المستند',[ln('عنوان المستند',w.t),'',dv.textContent.trim()||'-'].join('\r\n')],['sheet.txt','الجدول',sl.join('\r\n')||'-'],
+  ['vault.txt','ملفات الخزنة',vt.length?vt.map(x=>MK()+FM(x.n)).join('\r\n'):'-']];
+ const hd=t=>MK()+'=== '+trs(t)+' ===',tx=p=>'\ufeff'+hd(p[1])+'\r\n\r\n'+p[2];
+ if($('df').value==='zip'&&typeof JSZip!=='undefined'){const z=new JSZip();P.forEach(p=>z.file(p[0],tx(p)));z.file('students.csv',stuCsv(st));if(sl.length)z.file('sheet.csv','\ufeff'+sl.join('\r\n'));
+  const d=ls.get('d:'+k,null);if(d)z.file('drawing.jpg',urlBlob(d));vt.forEach((x,i)=>z.file('vault/'+(i+1)+'_'+x.n.replace(/[\\/:*?"<>|]/g,'_'),urlBlob(x.u)));
+  saveTxt('my-data.zip',await z.generateAsync({type:'blob'}))}
+ else saveTxt('my-data.txt',new Blob([P.map(tx).join('\r\n\r\n').replace(/\ufeff/g,'').replace(/^/,'\ufeff')],{type:'text/plain;charset=utf-8'}));
+ $('dp').value='';msg('m1','✔ تم تجهيز الملف',1)};
+
+</script>
+<script>
+/* ===== v4: الحسابات والتحكم على السيرفر =====
+   لو فتحت الملف من خارج السيرفر (ملف محلي أو تطبيق أندرويد) اكتب رابط السيرفر هنا،
+   مثال: window.API_BASE='https://my-app.onrender.com'
+   لو الملف مقدَّم من نفس السيرفر اتركه فاضي. */
+window.API_BASE = window.API_BASE || '';
+(function () {
+  const BASE = String(window.API_BASE || '').replace(/\/+$/, '');
+  const PROOF = {};
+  let OT = null, snap = '', pushing = 0, pt = 0;
+
+  /* ---- ترحيل أول مرة: الحسابات القديمة المحلية ما بتشتغل، لازم التسجيل من جديد ---- */
+  try {
+    if (!localStorage.getItem('v4')) {
+      const old = localStorage.getItem('acc');
+      if (old) localStorage.setItem('acc_legacy', old);
+      localStorage.removeItem('acc'); localStorage.removeItem('session');
+      localStorage.setItem('v4', '1');
+    }
+  } catch (e) {}
+
+  /* ---- الاتصال بالسيرفر ---- */
+  const tk = () => ls.get('tok', null);
+  async function api(p, o) {
+    o = o || {};
+    const h = { 'Content-Type': 'application/json' };
+    const t = o.token !== undefined ? o.token : tk();
+    if (t) h.Authorization = 'Bearer ' + t;
+    try {
+      const r = await fetch(BASE + p, { method: o.method || (o.body ? 'POST' : 'GET'), headers: h, body: o.body ? JSON.stringify(o.body) : undefined });
+      let d = {}; try { d = await r.json(); } catch (e) {}
+      return { ok: r.ok, status: r.status, d };
+    } catch (e) { return { ok: false, status: 0, d: { error: 'network' } }; }
+  }
+  const ERR = {
+    network: 'تعذر الاتصال بالسيرفر، تأكد من الإنترنت ثم حاول مجدداً',
+    no_account: 'لا يوجد حساب بهذا الرقم أو البريد',
+    bad_password: 'كلمة المرور خاطئة',
+    too_many: 'محاولات كثيرة خاطئة، انتظر دقيقة ثم حاول مجدداً',
+    bad_code: 'رمز خاطئ — فشل التحقق',
+    phone_taken: 'هذا الرقم مسجل بحساب بالفعل، استخدم تسجيل الدخول',
+    email_taken: 'هذا البريد مرتبط بحساب آخر',
+    nid_taken: 'رقم الهوية مسجل بحساب آخر',
+    bad_proof: 'انتهت صلاحية رمز التحقق، اطلب رمزاً جديداً',
+    invalid: 'بيانات غير صحيحة',
+    mismatch: 'البيانات غير مطابقة',
+    not_found: 'لا يوجد حساب بهذه البيانات',
+    bad_key: '❌ الرمز خاطئ',
+    expired: 'انتهت الجلسة، سجّل الدخول من جديد',
+    server: 'حدث خطأ في السيرفر، حاول لاحقاً'
+  };
+  const errMsg = r => {
+    const e = r.d && r.d.error;
+    if (e === 'locked' || e === 'disabled') return stMsg({ lk: e === 'locked', dis: r.d.until });
+    return ERR[e] || ERR.server;
+  };
+
+  /* ---- نسخة الحساب المحلية (مرآة لما في السيرفر) ---- */
+  const SYNC = ['p', 'e', 'sx', 'ar', 'en', 'nc', 'nid', 'sq', 'ct'];
+  const view = a => JSON.stringify(SYNC.map(f => (f === 'ct' ? !!a.ct : a[f] === undefined ? null : a[f])));
+  function putAcc(sa, hs) {
+    const k = key9(sa.p), A = ls.get('acc', {}), old = A[k] || {};
+    const a = Object.assign({}, old, { p: sa.p, e: sa.e, ar: sa.ar, en: sa.en, nc: sa.nc, nid: sa.nid, sx: sa.sx, lk: sa.lk ? 1 : 0, dis: sa.dis || 0, ct: sa.ct ? 1 : 0 });
+    if (sa.sq) a.sq = sa.sq; else delete a.sq;
+    if (hs) { a.s = hs.s; a.h = hs.h; }
+    A[k] = a;
+    try { localStorage.setItem('acc', JSON.stringify(A)); } catch (e) {}
+    snap = view(a);
+    return a;
+  }
+
+  /* أي تعديل محلي على الحساب (الاسم، البريد، الأسئلة...) يُرسل للسيرفر */
+  const _set = ls.set;
+  ls.set = function (k, v) {
+    const r = _set.call(ls, k, v);
+    if (k === 'acc' && tk() && ls.get('session')) { clearTimeout(pt); pt = setTimeout(pushAcc, 60); }
+    return r;
+  };
+  async function pushAcc() {
+    const s = ls.get('session'); if (!s || !tk()) return;
+    const a = ls.get('acc', {})[key9(s.p)]; if (!a || view(a) === snap) return;
+    const body = {}; SYNC.forEach(f => { body[f] = a[f] === undefined ? null : a[f]; }); body.ct = !!a.ct;
+    if (PROOF.ed) body.proof = PROOF.ed;
+    pushing = 1; const r = await api('/api/me', { method: 'PUT', body }); pushing = 0;
+    if (r.ok) { delete PROOF.ed; putAcc(r.d.account); return; }
+    if (r.status === 401 || r.status === 403) { beat(); return; }
+    await ask(errMsg(r), 1);
+    const g = await api('/api/me'); if (g.ok) putAcc(g.d.account);
+    try { renderSet(); } catch (e) {}
+  }
+
+  /* ---- فحص الحساب كل ١٠ ثواني: حظر/تعطيل/حذف/تغيير باسوورد من المالك يظهر فوراً ---- */
+  async function beat() {
+    const s = ls.get('session'); if (!s || !tk() || pushing) return;
+    const r = await api('/api/me');
+    if (r.status === 0) return;
+    if (r.ok) { putAcc(r.d.account); return; }
+    if (r.status === 401 || r.status === 403) {
+      const m = r.status === 403 ? errMsg(r) : (r.d.error === 'deleted' ? 'تم حذف هذا الحساب' : ERR.expired);
+      logout(); msg('m1', m);
+    }
+  }
+  setInterval(beat, 10000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) beat(); });
+  setTimeout(beat, 400);
+
+  const _lo = logout;
+  logout = function () { ls.del('tok'); return _lo.apply(this, arguments); };
+
+  /* ---- تسجيل الدخول ---- */
+  doLogin = async function () {
+    const id = $('id1').value, pw = $('pw1').value;
+    const ie = idErr(id); if (ie) { msg('m1', ie); return; }
+    if (pw.length > 128) { msg('m1', 'كلمة المرور أطول من المسموح'); return; }
+    const r = await api('/api/login', { body: { id: id.trim(), password: pw }, token: null });
+    if (!r.ok) { msg('m1', errMsg(r)); return; }
+    ls.set('tok', r.d.token);
+    const a = putAcc(r.d.account, await newHash(pw));
+    start(a);
+  };
+
+  /* ---- رمز التحقق: يصدره المالك من لوحته، والسيرفر هو اللي يتحقق ---- */
+  otpUI = function (el, o) {
+    let ref = newRef(), bad = 0, busy = 0;
+    const PN = { up: 'إنشاء حساب', fg: 'استعادة كلمة المرور', ed: 'تعديل بيانات الحساب' }[o.purpose];
+    el.innerHTML = '<h2 style="text-align:center">🔐 رمز التحقق</h2><small>اطلب الرمز من مالك المنصة عبر واتساب ثم اكتبه في الخانات. كل طلب يعطي رمزاً جديداً مختلفاً.</small><div class="code rf" style="font-size:15px;letter-spacing:1px"></div><button class="wa" style="background:#25D366;color:#fff">طلب الرمز من المالك (واتساب)</button><div class="otp"></div><div class="om m"></div><button class="s nw">🔄 طلب رمز جديد</button>' + (o.onBack ? '<button class="s bk">← رجوع</button>' : '');
+    const box = el.querySelector('.otp'), om = el.querySelector('.om'), rf = el.querySelector('.rf'), q = s => el.querySelector(s);
+    const showRef = () => rf.textContent = 'رقم الطلب: ' + ref; showRef();
+    q('.wa').onclick = () => openWa('249997268842', 'أرغب بـ' + PN + '\nرقمي: ' + o.p + '\nرقم الطلب: ' + ref + '\nأرجو إرسال رمز التحقق');
+    box.innerHTML = Array.from({ length: 5 }, (_, i) => '<input inputmode="numeric" maxlength="1" autocomplete="' + (i ? 'off' : 'one-time-code') + '" aria-label="' + (i + 1) + '">').join('');
+    const I = [...box.children], val = () => I.map(x => x.value).join('');
+    function clr() { box.className = 'otp'; I.forEach(x => { x.value = ''; x.disabled = false; }); I[0].focus(); }
+    q('.nw').onclick = () => { ref = newRef(); bad = 0; showRef(); clr(); om.textContent = 'رمز جديد: الرمز السابق لم يعد صالحاً، اطلب الرمز من جديد.'; om.className = 'om m ok'; };
+    if (o.onBack) q('.bk').onclick = o.onBack;
+    async function chk() {
+      if (busy) return; busy = 1;
+      const r = await api('/api/otp/check', { body: { phone: o.p, purpose: o.purpose, ref, code: val() }, token: null });
+      if (r.ok) {
+        PROOF[o.purpose] = r.d.proof;
+        box.className = 'otp ok'; I.forEach(x => x.disabled = true);
+        om.textContent = '✔ تم التحقق بنجاح'; om.className = 'om m ok';
+        setTimeout(o.onOk, 700);
+      } else {
+        bad++; box.className = 'otp bad'; om.className = 'om m er';
+        const lim = bad >= 5 || (r.d && r.d.error === 'too_many');
+        om.textContent = r.status === 0 ? ERR.network : lim ? '❌ فشل التحقق: تجاوزت المحاولات، اطلب رمزاً جديداً' : '❌ رمز خاطئ — فشل التحقق';
+        if (lim) { ref = newRef(); bad = 0; showRef(); }
+        setTimeout(() => { if (box.classList.contains('bad')) clr(); }, 900);
+      }
+      busy = 0;
+    }
+    I.forEach((x, i) => {
+      x.oninput = () => { x.value = dg(x.value).replace(/\D/g, '').slice(-1); box.className = 'otp'; om.textContent = ''; if (x.value && i < 4) I[i + 1].focus(); if (val().length === 5) chk(); };
+      x.onkeydown = e => { if (e.key === 'Backspace' && !x.value && i > 0) { I[i - 1].focus(); I[i - 1].value = ''; } };
+      x.onpaste = e => { const t = dg((e.clipboardData || window.clipboardData).getData('text')).replace(/\D/g, '').slice(0, 5); if (!t) return; e.preventDefault();[...t].forEach((c, j) => I[j].value = c); I[Math.min(t.length, 4)].focus(); if (t.length === 5) chk(); };
+    });
+    I[0].focus();
+  };
+
+  /* ---- إنشاء الحساب ---- */
+  finishUp = async function () {
+    const q = pend; if (!q) return;
+    const r = await api('/api/register', { body: { phone: q.p, email: q.e, ar: q.ar, en: q.en, nc: q.nc, nid: q.nid, sx: q.sx, password: q.pw, proof: PROOF.up }, token: null });
+    if (!r.ok) { pend = null; upShow(); msg('m1', errMsg(r)); return; }
+    delete PROOF.up;
+    ls.set('tok', r.d.token);
+    const a = putAcc(r.d.account, await newHash(q.pw));
+    pend = null; ['pw', 'ph', 'em'].forEach(i => $(i).value = ''); upShow();
+    start(a); sendOwner(acctMsg(a), a.p, q.pw);
+  };
+
+  /* ---- نسيت كلمة المرور ---- */
+  checkFg = async function () {
+    fgAcc = null; fgOk = false; $('fgn').classList.add('hide'); $('fgp').classList.add('hide');
+    const v = dg($('fid').value).trim();
+    if (!v) { msg('m1', 'أدخل رقم الهاتف أو البريد الإلكتروني أو رقم الهوية الوطنية'); return; }
+    const r = await api('/api/lookup', { body: { v }, token: null });
+    if (!r.ok) { msg('m1', errMsg(r)); return; }
+    fgAcc = r.d.account; fgBy = r.d.by; msg('m1', ''); $('fgn').classList.remove('hide'); fgMenu();
+  };
+  fgAsk = function (m) {
+    const a = fgAcc, o = $('fgo');
+    o.innerHTML = (m === 'sq' ? a.sq.q.map((qi, i) => '<label>' + SQS[qi] + '</label><input data-a="' + i + '" autocomplete="off">').join('') : '<label>' + (m === 'em' ? 'اكتب بريدك الإلكتروني المسجل' : 'اكتب رقم هويتك الوطنية') + '</label><input id="fa" dir="ltr" autocomplete="off">') + '<div class="m er" id="fe"></div><button id="fk">تحقق</button><button class="s" id="fb">← رجوع</button>';
+    o.querySelector('#fb').onclick = fgOther;
+    o.querySelector('#fk').onclick = async () => {
+      const e = o.querySelector('#fe'), body = { phone: a.p, method: m };
+      if (m === 'sq') { body.answers = [...o.querySelectorAll('[data-a]')].map(x => nz(x.value)); if (body.answers.some(x => !x)) { e.textContent = ERR.mismatch; return; } }
+      else body.value = dg(o.querySelector('#fa').value).trim();
+      const r = await api('/api/recover/verify', { body, token: null });
+      if (r.ok) { PROOF.fg = r.d.proof; fgDone(); }
+      else e.textContent = r.status === 0 ? ERR.network : r.d.error === 'too_many' ? ERR.too_many : ERR.mismatch;
+    };
+  };
+  resetPw = async function () {
+    if (!fgAcc || !fgOk) return;
+    const pw = $('fpw').value;
+    if (pw.length < 6) { msg('m1', 'كلمة المرور قصيرة (٦ أحرف على الأقل)'); return; }
+    if (pw.length > 128) { msg('m1', 'كلمة المرور أطول من المسموح (١٢٨ حرفاً)'); return; }
+    const r = await api('/api/reset', { body: { phone: fgAcc.p, proof: PROOF.fg, password: pw }, token: null });
+    if (!r.ok) { msg('m1', errMsg(r)); return; }
+    delete PROOF.fg; fgAcc = null; fgOk = false; ['fpw', 'fid'].forEach(i => $(i).value = ''); setMode('in');
+    msg('m1', '✔ تم تغيير كلمة المرور، سجّل الدخول', 1);
+  };
+
+  /* ---- حذف الحساب (من المستخدم نفسه) ---- */
+  delAcc = async function () {
+    const a = findAcc((ls.get('session') || {}).p); if (!a) return;
+    if (!await proof(a, $('dk').value)) { msg('m6', 'البيانات غير مطابقة'); return; }
+    if (!await ask('سيتم حذف الحساب وكل بياناته (الطلاب والخزنة والمستندات والرسم والجدول) نهائياً. متابعة؟')) return;
+    const r = await api('/api/me', { method: 'DELETE' });
+    if (!r.ok && r.status !== 401) { msg('m6', errMsg(r)); return; }
+    const k = key9(a.p), A = ls.get('acc', {}); delete A[k]; try { localStorage.setItem('acc', JSON.stringify(A)); } catch (e) {}
+    ['u:', 'v:', 'w:', 'd:', 'x:', 'k:'].forEach(x => ls.del(x + k));
+    $('dk').value = ''; $('delbox').classList.add('hide'); logout(); msg('m1', '✔ تم حذف الحساب', 1);
+  };
+
+  /* ================= لوحة المالك (كلها عبر السيرفر) ================= */
+  const oapi = (p, body, method) => api(p, { method: method || (body ? 'POST' : 'GET'), body, token: OT });
+  const oerr = r => r.status === 0 ? ERR.network : r.status === 401 ? 'انتهت جلسة المالك، أغلق اللوحة وافتحها من جديد' : (ERR[r.d && r.d.error] || ERR.server);
+
+  ownerPanel = function () {
+    ovl('<div class="shield"><svg viewBox="0 0 64 72" width="92" height="104"><path d="M32 3 6 13v22c0 18 11 29 26 34 15-5 26-16 26-34V13z" fill="#3b0d0d" stroke="#ff4d4d" stroke-width="3"/><path d="M32 22v20M32 49v3" stroke="#ff4d4d" stroke-width="5" stroke-linecap="round"/></svg></div><div class="red">⛔ هذا الخيار للمالك فقط</div><p style="text-align:center;margin:4px 0"><small>الدخول لغير المالك ممنوع. لن تظهر أي بيانات قبل إدخال رمز المالك.</small></p><label>رمز المالك</label><input id="ok" type="password" autocomplete="off"><div id="om" class="m er"></div><button id="y">فتح اللوحة</button><button class="s" id="n">إغلاق</button>', (o, close) => {
+      const stop = () => { clearInterval(otk); OT = null; close(); };
+      o.querySelector('#n').onclick = stop;
+      const go_ = async () => {
+        const m = o.querySelector('#om');
+        const r = await api('/api/owner/login', { body: { key: o.querySelector('#ok').value }, token: null });
+        if (!r.ok) { m.textContent = r.status === 0 ? ERR.network : r.d.error === 'too_many' ? ERR.too_many : ERR.bad_key; return; }
+        OT = r.d.token; ownerMain(o, stop);
+      };
+      o.querySelector('#y').onclick = go_;
+      o.querySelector('#ok').onkeydown = e => { if (e.key === 'Enter') go_(); };
+    });
+  };
+
+  ownerMain = function (o, stop) {
+    const c = o.firstChild, q = s => c.querySelector(s);
+    c.innerHTML = '<h2>🛡️ لوحة المالك</h2><label>البحث عن حساب (رقم الهوية أو الهاتف أو البريد أو الاسم) — اتركه فاضياً لعرض آخر الحسابات</label><input id="oq" dir="auto" autocomplete="off"><button id="os">🔍 بحث</button><div id="oa"></div><hr style="border-color:#2b3a5e;margin:14px 0"><h2>🔑 رمز تحقق لطلب</h2><label>رقم هاتف الشخص</label><input id="gp" type="tel" dir="ltr"><label>رقم الطلب (من رسالة الشخص)</label><input id="gr" inputmode="numeric" dir="ltr" maxlength="6"><label>نوع الطلب</label><select id="gt"><option value="up">إنشاء حساب</option><option value="fg">استعادة كلمة المرور</option><option value="ed">تعديل بيانات الحساب</option></select><div id="gc" class="code" style="min-height:30px"></div><button id="gb">إظهار رمز التحقق</button><button class="s" id="oz">إغلاق</button>';
+    q('#oz').onclick = stop;
+    q('#gb').onclick = async () => {
+      const r = dg(q('#gr').value).trim();
+      if (key9(q('#gp').value).length < 7 || !/^\d{6}$/.test(r)) { q('#gc').textContent = 'أدخل الهاتف ورقم الطلب (٦ أرقام)'; return; }
+      const x = await oapi('/api/owner/otp', { phone: dg(q('#gp').value), purpose: q('#gt').value, ref: r });
+      q('#gc').textContent = x.ok ? x.d.code : oerr(x);
+    };
+    q('#os').onclick = async () => {
+      const v = dg(q('#oq').value).trim(), box = q('#oa');
+      const x = await oapi('/api/owner/accounts?q=' + encodeURIComponent(v));
+      if (!x.ok) { box.innerHTML = '<div class="m er">' + esc(oerr(x)) + '</div>'; return; }
+      const L = x.d.accounts;
+      if (L.length === 1) { showAcc(box, L[0]); return; }
+      if (!L.length) { showAcc(box, null); return; }
+      box.innerHTML = '<small>' + L.length + ' حساب</small>' + L.map((a, i) => '<button class="s" data-i="' + i + '"><span dir="auto">' + esc(a.ar || a.en || '-') + '</span> · <span dir="ltr">' + esc(a.p) + '</span>' + (a.lk ? ' 🔒' : a.dis ? ' ⏱' : '') + '</button>').join('');
+      box.querySelectorAll('[data-i]').forEach(b => b.onclick = () => showAcc(box, L[+b.dataset.i]));
+    };
+  };
+
+  showAcc = function (box, a) {
+    clearInterval(otk);
+    if (!a) { box.innerHTML = '<div class="m er">لا يوجد حساب بهذه البيانات</div>'; return; }
+    const dis = a.dis && a.dis > Date.now();
+    const R = (l, v) => '<div class="ir"><div style="min-width:0"><small>' + l + '</small><br><b dir="auto" style="overflow-wrap:anywhere">' + esc(v || '-') + '</b></div></div>';
+    const fd = t => t ? new Date(t).toLocaleString() : '-';
+    box.innerHTML = '<div style="margin-top:10px">' + R('الاسم بالعربية', a.ar) + R('Name (English)', a.en) + R('الدولة', NCN(a.nc)) + R('رقم الهوية', a.nid) + R('الهاتف', a.p) + R('البريد', a.e) + R('الجنس', a.sx === 'M' ? 'ذكر' : a.sx === 'F' ? 'أنثى' : '') + R('تاريخ التسجيل', fd(a.created)) + R('آخر دخول', fd(a.last)) + R('الحالة', a.lk ? '🔒 مقفل' : dis ? '⏱ معطّل' : '✅ نشط') + '</div>'
+      + (dis ? '<div id="oc" class="code"></div><button class="s" id="ou">إلغاء التعطيل</button>' : '')
+      + '<button id="ol" class="' + (a.lk ? '' : 'd') + '">' + (a.lk ? '🔓 فتح قفل الحساب' : '🔒 قفل الحساب') + '</button>'
+      + '<label>تعطيل الحساب لمدة (من ساعة إلى ٧٢ ساعة)</label><div style="display:grid;grid-template-columns:52px 1fr 52px;gap:8px;align-items:center"><button class="s" id="hm" style="margin:0">−</button><div id="hv" class="code" style="margin:0">1 ' + trs('ساعة') + '</div><button class="s" id="hp" style="margin:0">+</button></div><input id="hr" type="range" min="1" max="72" value="1" style="padding:0;margin-top:8px"><button id="hd">⏱ بدء التعطيل بالعداد</button>'
+      + '<button class="s" id="orv">🚪 تسجيل خروج المستخدم من كل أجهزته</button>'
+      + '<label>تعيين كلمة مرور جديدة للمستخدم (استرجاع الحساب)</label><input id="np" type="password" autocomplete="new-password"><button class="s" id="on">حفظ كلمة المرور</button><button class="d" id="od">🗑 حذف الحساب نهائياً</button><div id="ox" class="m"></div>';
+    const q = s => box.querySelector(s), sl = q('#hr'), sync = () => q('#hv').textContent = sl.value + ' ' + trs('ساعة');
+    const note = (t, ok) => { const x = q('#ox'); x.textContent = t; x.className = 'm ' + (ok ? 'ok' : 'er'); };
+    const reload = async () => { const x = await oapi('/api/owner/accounts?id=' + a.id); showAcc(box, x.ok ? x.d.accounts[0] : null); };
+    const act = async (p, body, method) => { const x = await oapi(p, body, method); if (!x.ok) { note(oerr(x)); return null; } return x; };
+    sl.oninput = sync;
+    q('#hm').onclick = () => { sl.value = Math.max(1, +sl.value - 1); sync(); };
+    q('#hp').onclick = () => { sl.value = Math.min(72, +sl.value + 1); sync(); };
+    q('#hd').onclick = async () => { if (await act('/api/owner/accounts/' + a.id + '/disable', { hours: +sl.value })) reload(); };
+    q('#ol').onclick = async () => { if (await act('/api/owner/accounts/' + a.id + '/lock', { lock: !a.lk })) reload(); };
+    q('#orv').onclick = async () => { if (await act('/api/owner/accounts/' + a.id + '/revoke', {})) note('✔ تم إنهاء جلسات المستخدم', 1); };
+    if (dis) {
+      const t = () => { const r = a.dis - Date.now(); if (r <= 0) { clearInterval(otk); reload(); return; } q('#oc').textContent = '⏳ ' + fmtT(r); };
+      t(); otk = setInterval(t, 1000);
+      q('#ou').onclick = async () => { if (await act('/api/owner/accounts/' + a.id + '/disable', { hours: 0 })) reload(); };
+    }
+    q('#on').onclick = async () => {
+      const p = q('#np').value;
+      if (p.length < 6) { note('كلمة المرور ٦ أحرف على الأقل'); return; }
+      if (await act('/api/owner/accounts/' + a.id + '/password', { password: p })) { q('#np').value = ''; note('✔ تم تعيين كلمة المرور', 1); }
+    };
+    q('#od').onclick = async () => {
+      if (!await ask(trs('حذف حساب') + ' ' + (a.ar || a.p) + ' ' + trs('وكل بياناته نهائياً؟'))) return;
+      if (await act('/api/owner/accounts/' + a.id, null, 'DELETE')) box.innerHTML = '<div class="m ok">✔ تم حذف الحساب</div>';
+    };
+  };
+})();
+</script>
+</body>
+</html>
